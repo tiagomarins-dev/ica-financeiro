@@ -278,8 +278,7 @@ class cadastro
 	{
 		$AnoMes = $ano . '-' . $mes;
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select 
 						date_format(data_servico,'%Y-%m') mesesServico, 
@@ -310,15 +309,13 @@ class cadastro
 				
 			}
 		}		
-		$mysqli->close();
 	}	
 	
 	public function ListaMesesStats($mes,$ano)
 	{
 		$AnoMes = $ano . '-' . $mes;
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select 
 						date_format(data_servico,'%Y-%m') mesesServico, 
@@ -350,15 +347,13 @@ class cadastro
 				
 			}
 		}		
-		$mysqli->close();
 	}
 	
 	public function ListaMesesCartoes($mes,$ano)
 	{
 		$AnoMes = $ano . '-' . $mes;
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select 
 						date_format(data_servico,'%Y-%m') mesesServico, 
@@ -390,7 +385,6 @@ class cadastro
 				
 			}
 		}		
-		$mysqli->close();
 	}
 	
 	private function TratamentoValor($valor)
@@ -504,8 +498,7 @@ class cadastro
 			
 		}
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "SELECT id, nome_usuario FROM usuario_atendimento u where id != '$idUsuarioAtual' and ativo = 'S';";
 		
@@ -526,7 +519,6 @@ class cadastro
 			}
 			
 		}
-		$mysqli->close();
 	}
 	
 	/************************* SERVIÇOS ***********************************/
@@ -537,8 +529,7 @@ class cadastro
 		
 		$idUser = (isset($_SESSION['idUser'])) ? $_SESSION['idUser'] : '';
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call insere_servico(
 										'$this->dataCadastro', -- DataCadastro
@@ -613,15 +604,13 @@ class cadastro
 						<h4>'.$msgErro.'</h4>
 					</div>';
 		}
-		$mysqli->close();
 	}
 	
 	public function EditarServico() {
 	
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		
 		//echo $this->dataPrevisaoDeposito;
@@ -684,7 +673,6 @@ class cadastro
 		echo '</pre>';
 		*/
 		
-		$mysqli->close();
 	
 	}
 	
@@ -692,8 +680,7 @@ class cadastro
 	{
 		$this->PegarPost();	
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "delete from servicos where id = '$this->idServico'";
 		$result = $mysqli->query($sql);
@@ -701,15 +688,13 @@ class cadastro
 		{
 			echo '<script>alert("O serviço foi excluído com sucesso!");</script>';
 		}
-		$mysqli->close();
 	}
 	
 	public function ApagarDespesaMensal()
 	{
 		$this->PegarPost();	
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "delete from despesas_mensais where id = '$this->idServico'";
 		$result = $mysqli->query($sql);
@@ -717,14 +702,12 @@ class cadastro
 		{
 			echo '<script>alert("A despesa foi excluída com sucesso!");</script>';
 		}
-		$mysqli->close();
 	}
 	
 	public function CadastrarDespesa()
 	{
 		$this->PegarPost();
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		if(
 			(strlen($this->dataDespesa) == '10') && (strlen($this->nomeDespesa) > 3) && (strlen($this->valorDespesa) > 2)
@@ -758,7 +741,6 @@ class cadastro
 						<h4>'.$msgErro.'</h4>
 					</div>';
 					
-				$mysqli->close();
 			}
 		}
 		else
@@ -790,8 +772,7 @@ class cadastro
 	public function CadastrarDespesaFixa()
 	{
 		$this->PegarPost();
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		if(
 			(strlen($this->vencimento) > 0) && (strlen($this->nomeDespesa) > 3) && (strlen($this->valorDespesa) > 2)
@@ -835,15 +816,13 @@ class cadastro
 						<h4>'.$msgErro.'</h4>
 					</div>';
 		}
-		$mysqli->close();
 	}
 	
 	public function ListaServico($mes,$ano)
 	{
 		$periodo = $ano . '-' . $mes;
 
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call lista_servicos('$periodo');";
 		$result = $mysqli->query($sql);
@@ -938,15 +917,13 @@ class cadastro
             echo $mysqli->error;
 			echo 'Erro';
 		}
-		$mysqli->close();
 	}
 
 	public function ListaServicoCartao_OLD($mes,$ano)
 	{
 		$periodo = $ano . '-' . $mes;
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call lista_cartoes('$periodo');";
 
@@ -1035,7 +1012,6 @@ class cadastro
 		{
 			echo 'Erro';
 		}
-		$mysqli->close();
 	}
 
     public function ListaServicoCartao($data_inicio, $data_fim, $id_cartao)
@@ -1055,8 +1031,7 @@ class cadastro
             $id_cartao = $id_cartao;
 		}
 
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-        $mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 
         $sql = "select
 				  s.id,
@@ -1171,7 +1146,6 @@ class cadastro
         {
             echo 'Erro';
         }
-        $mysqli->close();
     }
 
 
@@ -1182,8 +1156,7 @@ class cadastro
 		
 		$valor = array();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_resumoCartao('$periodo');";
 		$result = $mysqli->query($sql);
@@ -1204,14 +1177,12 @@ class cadastro
 		
 		return $valor;
 		
-		$mysqli->close();
 		
 	}
 	
 	public function DetalhesServico($id,$typeData)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call detalhes_servico('$id');";
 		$result = $mysqli->query($sql);	
@@ -1315,15 +1286,13 @@ class cadastro
 				}				
 			}
 		}
-		$mysqli->close();
 	}
 	
 	public function MarcarDepositado($id)
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		// Prepared statement - $id é hash md5 vindo da URL
 		$stmt = $mysqli->prepare("update pagamentos set depositado = 'S', data_depositado = ? where md5(id_servico) = ?");
@@ -1337,15 +1306,13 @@ class cadastro
 					</script>';		
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function MarcarRecebido($id)
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		//$sql = "update pagamentos set recebido = 'S', data_recebido = '$this->dataRecebido' where md5(id_servico) = '$id';";
 		
@@ -1361,14 +1328,12 @@ class cadastro
 					</script>';		
 		}
 		
-		$mysqli->close();
 	}
 	
 	
 	public function MarcarNaoCompensado($id)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		// Prepared statement - $id é hash md5 vindo da URL
 		$stmt = $mysqli->prepare("update pagamentos set compensado = 'N' where md5(id_servico) = ?");
@@ -1382,7 +1347,6 @@ class cadastro
 					</script>';		
 		}
 		
-		$mysqli->close();
 	}
 	
 	/************************* DESPESAS ***********************************/
@@ -1391,8 +1355,7 @@ class cadastro
 	{
 		$dataBusca = $ano . "-" . $mes; //Data para Busca no banco de dados
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select d.id, date_format(d.data_despesa, '%d/%m/%Y') dataDespesa, d.despesa, d.descricao, d.valor_despesa from despesas_mensais d where d.data_despesa like '$dataBusca%' order by d.data_despesa asc";
 		//echo $sql;
@@ -1447,15 +1410,13 @@ class cadastro
 			}
 			
 		}
-		$mysqli->close();
 	}
 
 	public function ListaDespesasFixas()
 	{
 		//$dataBusca = $ano . "-" . $mes	. "-01"; //Data para Busca no banco de dados
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "SELECT id, despesa, descricao, valor_despesa, dia_vencimento FROM despesas_fixas d order by dia_vencimento asc;";
 		$result = $mysqli->query($sql);
@@ -1510,15 +1471,13 @@ class cadastro
 				echo "Sem despesas cadastradas";
 			}			
 		}
-		$mysqli->close();		
 	}
 	
 	public function RetornaDadosDespesa($id)
 	{
 		$dados = array();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, despesa, descricao, valor_despesa, dia_vencimento from despesas_fixas where id = '$id'";
 		$result = $mysqli->query($sql);		
@@ -1538,15 +1497,13 @@ class cadastro
 		}		
 		return $dados;
 		
-		$mysqli->close();
 	}
 	
 	public function EditarDespesaFixa()
     {
         $this->PegarPost();
         
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 		
 		//$sql = "call editar_formaPagamento('$this->idPagamento','$this->formaPagamento','$this->descFormaPagamento','$this->pDescontoFormaPagamento');";
 		$sql = "update despesas_fixas set 
@@ -1578,15 +1535,13 @@ class cadastro
 				echo $sql;
 		}
 		
-		$mysqli->close();
     }
 	
 	public function ApagarDespesaFixa()
 	{
 		$this->PegarPost();	
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "delete from despesas_fixas where id = '$this->idApagaDespesaFixa'";
 		$result = $mysqli->query($sql);
@@ -1594,13 +1549,11 @@ class cadastro
 		{
 			echo '<script>alert("A despesa foi excluída com sucesso!");</script>';
 		}
-		$mysqli->close();
 	}
 
 	public function ListaDespesasFixasFormulario()
 	{		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, dia_vencimento Vencimento, d.despesa, d.descricao, d.valor_despesa from despesas_fixas d where d.ativo = 'S'";
 		$result = $mysqli->query($sql);
@@ -1650,13 +1603,11 @@ class cadastro
 			}
 			
 		}
-		$mysqli->close();		
 	}
 	
 	private function ImportarDespesa($id,$ano,$mes)
 	{		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call importa_despesa('$id','$ano','$mes');";
 		$result = $mysqli->query($sql);
@@ -1678,7 +1629,6 @@ class cadastro
 					<p>'.$msgErro.'</p>
 				</div>';
 		}	
-		$mysqli->close();
 	}
 	
 	public function ImportacaoDespesas()
@@ -1697,8 +1647,7 @@ class cadastro
 	
 	public function SomaDespesaMes($mes,$ano)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call soma_despesa_mes('$ano','$mes');";
 		$result = $mysqli->query($sql);
@@ -1726,7 +1675,6 @@ class cadastro
 		}
 		return $this->totalDespesaMensal;	
 		
-		$mysqli->close();
 	}
     
     /************************* FORMA DE PAGAMENTO ***********************************/
@@ -1735,8 +1683,7 @@ class cadastro
     {
         $this->PegarPost();
         
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 		
 //		$sql = "call insere_formaPagamento('$this->formaPagamento','$this->descFormaPagamento','$this->pDescontoFormaPagamento');";
 
@@ -1771,15 +1718,13 @@ class cadastro
 					<h4>'.$msgErro.'</h4>
 				</div>';
 		}
-		$mysqli->close();
     }
     
     public function EditarFormaPagamento()
     {
         $this->PegarPost();
 
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 
 		$this->pDescontoFormaPagamento = $this->converteValorBanco($this->pDescontoFormaPagamento);
 		
@@ -1813,15 +1758,13 @@ class cadastro
 				
 				echo $sql;
 		}
-		$mysqli->close();
     }
     
     public function RetornaDadosFormaPagamento($id)
     {
 		$dados = array();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, tipo, dias, descricao, p_desconto from tipo_pagamento where id = '$id'";
 		$result = $mysqli->query($sql);
@@ -1842,13 +1785,11 @@ class cadastro
 		}
 		
 		return $dados;
-		$mysqli->close();
 	}
 	
 	public function ListaFormaPagamento()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, tipo, dias, descricao, p_desconto from tipo_pagamento order by id asc";
 		$result = $mysqli->query($sql);
@@ -1926,13 +1867,11 @@ class cadastro
 				echo 'Sem registros';
 			}
 		}
-		$mysqli->close();
 	}
 	
 	public function ListaFormaPagamentoForm()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, tipo from tipo_pagamento order by tipo asc";
 		$result = $mysqli->query($sql);
@@ -1956,13 +1895,11 @@ class cadastro
 				echo 'Sem registros';
 			}
 		}
-		$mysqli->close();
 	}
 
 	public function ListaFormaPagamentoFormEdit($pagamento)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, tipo from tipo_pagamento where id != '$pagamento' order by tipo asc";
 		$result = $mysqli->query($sql);
@@ -1983,13 +1920,11 @@ class cadastro
 				echo 'Sem registros';
 			}
 		}
-		$mysqli->close();
 	}
 	
 	public function ListaFormaPagamentoFormRelat($pagamento)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select tipo from tipo_pagamento where tipo != '$pagamento' order by tipo asc";
 		$result = $mysqli->query($sql);
@@ -2020,15 +1955,13 @@ class cadastro
 				//echo 'Sem registros';
 			}
 		}
-		$mysqli->close();
 	}
 	
 	public function ApagarFormaPagamento()
 	{
 		$this->PegarPost();	
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "delete from tipo_pagamento where id = '$this->idPagamento'";
 		$result = $mysqli->query($sql);
@@ -2036,7 +1969,6 @@ class cadastro
 		{
 			echo '<script>alert("O tipo de pagamento foi excluído com sucesso!");</script>';
 		}
-		$mysqli->close();
 	}
 	
 	/************************* CLIENTES ***********************************/
@@ -2045,8 +1977,7 @@ class cadastro
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		if(strlen($this->nomeCliente) > 1)
 		{
@@ -2090,15 +2021,13 @@ class cadastro
 					</div>';
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function RetornaDadosCliente($id)
     {
 		$dados = array();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, nome_cliente, descricao from clientes where id = '$id'";
 		$result = $mysqli->query($sql);		
@@ -2116,13 +2045,11 @@ class cadastro
 		}		
 		return $dados;
 		
-		$mysqli->close();
 	}
 	
 	public function ListaClientes()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, nome_cliente, descricao from clientes order by nome_cliente asc";
 		$result = $mysqli->query($sql);
@@ -2176,15 +2103,13 @@ class cadastro
 				echo 'Sem registros';
 			}
 		}
-		$mysqli->close();
 	}
 	
 	public function EditarCliente()
     {
         $this->PegarPost();
         
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 		
 		//$sql = "call editar_formaPagamento('$this->idPagamento','$this->formaPagamento','$this->descFormaPagamento','$this->pDescontoFormaPagamento');";
 		$sql = "update clientes set nome_cliente = upper('$this->nomeCliente'), descricao = '$this->descCliente' where id = '$this->idCliente'";
@@ -2211,13 +2136,11 @@ class cadastro
 				echo $sql;
 		}
 		
-		$mysqli->close();
     }
 	
 	public function ListaClientesForm()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, nome_cliente from clientes order by nome_cliente asc";
 		$result = $mysqli->query($sql);
@@ -2239,13 +2162,11 @@ class cadastro
 			}
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function ListaCirurgiaForm($cirurgia)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select distinct cirurgia from servicos where cirurgia not like '$cirurgia' order by cirurgia asc";
 		$result = $mysqli->query($sql);
@@ -2278,13 +2199,11 @@ class cadastro
 			}
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function ListaClientesFormEdit($cliente)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, nome_cliente from clientes where id != '$cliente' order by nome_cliente asc";
 		$result = $mysqli->query($sql);
@@ -2306,15 +2225,13 @@ class cadastro
 			}
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function ApagarCliente()
 	{
 		$this->PegarPost();	
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "delete from clientes where id = '$this->idCliente'";
 		$result = $mysqli->query($sql);
@@ -2323,15 +2240,13 @@ class cadastro
 			echo '<script>alert("O cliente foi excluído com sucesso!");</script>';
 		}
 		
-		$mysqli->close();
 	}
 	
 	/************************* USUÁRIOS ***********************************/
 	
 	public function RetornaUsuariosAtendimento()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "SELECT id, nome_usuario FROM usuario_atendimento u where ativo = 'S';";
 		$result = $mysqli->query($sql);
@@ -2347,15 +2262,13 @@ class cadastro
 			}			
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function CadastrarUsuario()
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		if(
 			(strlen($this->nomeUsuario) > 3) && 
@@ -2434,14 +2347,12 @@ class cadastro
 		
 		}
 		
-		$mysqli->close();
 		
 	}
 	
 	public function ListaUsuarios()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, concat(nome_usuario,' ',sobrenome_usuario) nome, login_usuario from usuario_atendimento where ativo = 'S' order by id asc";
 		$result = $mysqli->query($sql);
@@ -2496,15 +2407,13 @@ class cadastro
 			}
 		}
 		
-		$mysqli->close();
 	}	
 	
 	public function RetornaDadosUsuario($id)
     {
 		$dados = array();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select id, nome_usuario, sobrenome_usuario, login_usuario from usuario_atendimento where id = '$id'";
 		$result = $mysqli->query($sql);		
@@ -2536,15 +2445,13 @@ class cadastro
 			$this->dadosUsuario['login_usuario'] = '';
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function EditarUsuario()
     {
         $this->PegarPost();
         
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 		
 		//$sql = "call editar_formaPagamento('$this->idPagamento','$this->formaPagamento','$this->descFormaPagamento','$this->pDescontoFormaPagamento');";
 		$sql = "update usuario_atendimento set 
@@ -2575,7 +2482,6 @@ class cadastro
 				//echo $sql;
 		}
 		
-		$mysqli->close();
     }
 	
 	public function AlterarSenhaUsuario()
@@ -2584,8 +2490,7 @@ class cadastro
 		
 		if($this->novaSenha1 == $this->novaSenha2)
 		{
-			$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-			$mysqli->set_charset('utf8');
+			$mysqli = conexao::pegar();
 			
 			$sql = "update usuario_atendimento set senha_usuario = md5('$this->novaSenha') where id = '$this->idUsuario';";
 			$result = $mysqli->query($sql);
@@ -2604,8 +2509,7 @@ class cadastro
 	{
 		$this->PegarPost();			
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 
 		$sql = "update usuario_atendimento set ativo = 'N' where id = '$this->idUsuario'";
 		//$sql = "delete from usuario_atendimento where id = '$this->idUsuario'";
@@ -2616,7 +2520,6 @@ class cadastro
 			echo '<script>alert("O usuário foi excluído com sucesso!");</script>';
 		}
 		
-		$mysqli->close();
 		
 	}
 	
@@ -2626,8 +2529,7 @@ class cadastro
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call insere_solucao_compensado(
 					'$id','$this->motivo','$this->bancoCliente','$this->nCheque','$this->solucao','$this->dataSolucao','$this->usuarioSolucao')";
@@ -2670,14 +2572,12 @@ class cadastro
 				</div>';
 		}
 		
-		$mysqli->close();
 		
 	}
 	
 	public function RetornaDadosCheque($id)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		// Prepared statement - $id é hash md5 vindo da URL
 		$stmt = $mysqli->prepare("select c.id, c.motivo, c.banco, c.n_cheque, c.solucao, date_format(c.data_solucao,'%d/%m/%Y') data_solucao, c.resp_usuario, u.nome_usuario
@@ -2730,15 +2630,13 @@ class cadastro
 			}
 		}
 
-		$mysqli->close();		
 	}
 	
 	public function EditarSolucao($id)
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call editar_solucao_compensado(
 					'$id','$this->motivo','$this->bancoCliente','$this->nCheque','$this->solucao','$this->dataSolucao','$this->usuarioSolucao')";
@@ -2752,15 +2650,13 @@ class cadastro
 					</script>';		
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function EditarDepositoCartao() {
 		
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 	
 		$i = 0;
 		$n = count($this->idServicoCartao);
@@ -2799,8 +2695,7 @@ class cadastro
 	
 	public function InsereVisitas($usuario, $ip, $sistema, $pagina) {
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call insere_visita('$usuario','$ip','$sistema','$pagina')";
 		$result = $mysqli->query($sql);
@@ -2837,8 +2732,7 @@ class cadastro
 		}
 
 
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-        $mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 
         $sql = "select 
 					sum(p.valor_final) totalReceber 
@@ -2874,8 +2768,7 @@ class cadastro
         }
 
 
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-        $mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 
         $sql = "select 
 					sum(p.valor_final) totalReceber 
@@ -2900,8 +2793,7 @@ class cadastro
 
 		$cartoes = array();
 
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-        $mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 
 		$sql = "select id, tipo from tipo_pagamento where id in (3,4,7,8,9,10,11,12,14,15) order by id asc;";
 		$result = $mysqli->query($sql);
@@ -2923,8 +2815,7 @@ class cadastro
 
 		if($id_cartao > 0) {
 
-            $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-            $mysqli->set_charset('utf8');
+            $mysqli = conexao::pegar();
 
             $sql = "select tipo from tipo_pagamento where id = $id_cartao;";
             $result = $mysqli->query($sql);
@@ -2948,8 +2839,7 @@ class cadastro
 
 		$total = 0;
 
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-        $mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 
         $sql = "select count(*) total from pagamentos where id_pagamento = $id_pagamento;";
         $result = $mysqli->query($sql);
@@ -2967,8 +2857,7 @@ class cadastro
 
 	public function apagarPagamento($id) {
 
-        $mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-        $mysqli->set_charset('utf8');
+        $mysqli = conexao::pegar();
 
         // Prepared statement - $id vem de POST (ver script/apagarPagamento.php)
         $stmt = $mysqli->prepare("delete from tipo_pagamento where id = ?");

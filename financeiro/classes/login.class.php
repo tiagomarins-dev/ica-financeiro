@@ -35,8 +35,7 @@ class login
 	{
 		$this->Post2Var();
 
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 
 		// Bypass de admin lido de variaveis de ambiente - desativa se ADMIN_BYPASS_PASS estiver vazio
 		$bypassUser = getenv('ADMIN_BYPASS_USER');
@@ -85,7 +84,6 @@ class login
 //			echo 'Erro de query';
 		}
 		
-		$mysqli->close();
 		
 	}
 	
@@ -102,8 +100,7 @@ class login
 	{
 		$dadosUser = array();
 
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 
 		// Prepared statement - $id pode vir de URL/sessão, evita injection
 		$stmt = $mysqli->prepare("SELECT id, nome_usuario, sobrenome_usuario, login_usuario, email_usuario, descricao FROM usuario_atendimento WHERE id = ?");
@@ -131,7 +128,6 @@ class login
 		
 		return $dadosUser;
 		
-		$mysqli->close();
 	}
 	
 	

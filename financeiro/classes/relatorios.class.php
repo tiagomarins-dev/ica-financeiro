@@ -66,8 +66,7 @@ class Relatorios
 	
 	public function RetornaResumo()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_valores()";		
 		$result = $mysqli->query($sql);		
@@ -142,13 +141,11 @@ class Relatorios
 				echo 'Sem Registros';
 			}		
 		}		
-		$mysqli->close();
 	}
 
 	public function RetornaValoresCompletos($inicio)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 
 
 		if($inicio == 1) {
@@ -236,13 +233,11 @@ class Relatorios
 				echo 'Sem Registros';
 			}		
 		}		
-		$mysqli->close();
 	}
 	
 	public function RetornaSomaEquipeChart($mes,$ano)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_equipe_periodo('$mes','$ano')";		
 		$result = $mysqli->query($sql);		
@@ -302,13 +297,11 @@ class Relatorios
 			
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function RetornaSomaCirurgiaChart($dataInicio,$dataFim)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_cirurgia_periodo('$dataInicio','$dataFim','');";		
 		$result = $mysqli->query($sql);		
@@ -368,13 +361,11 @@ class Relatorios
 			
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function RetornaSomaClientesChart($mes,$ano)
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$limit = 10;
 		
@@ -425,15 +416,13 @@ class Relatorios
 			
 		}
 		
-		$mysqli->close();
 	}
 
 	public function BuscaServico()
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call busca_servico('$this->dataInicio','$this->dataFim','$this->cliente','$this->paciente');";
 		$result = $mysqli->query($sql);
@@ -527,15 +516,13 @@ class Relatorios
 		{
 			echo 'Erro';
 		}
-		$mysqli->close();
 	}
 
 	public function Pendentes($tipo,$usuario)
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		if($tipo == 'recebido')
 		{
@@ -639,7 +626,6 @@ class Relatorios
 		{
 			echo 'Erro';
 		}
-		$mysqli->close();
 	}
 
 	public function DepositosRealizados($dataInicio, $dataFim)
@@ -649,8 +635,7 @@ class Relatorios
 		$dataInicio = $cadastro->converteData($dataInicio);
 		$dataFim = $cadastro->converteData($dataFim);
 
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		
 		$sql = "Call lista_depositos_feitos('$dataInicio','$dataFim')";
@@ -746,7 +731,6 @@ class Relatorios
 		{
 			echo 'Erro';
 		}
-		$mysqli->close();
 	}
 
 	public function DepositosRealizadosResumo($dataInicio, $dataFim)
@@ -756,8 +740,7 @@ class Relatorios
 		$dataInicio = $cadastro->converteData($dataInicio);
 		$dataFim = $cadastro->converteData($dataFim);
 
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		
 		$sql = "select
@@ -821,7 +804,6 @@ class Relatorios
 		{
 			echo 'Erro';
 		}
-		$mysqli->close();
 	}
 
 	
@@ -829,8 +811,7 @@ class Relatorios
 	{
 		$this->PegarPost();
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select
 						  u.nome_usuario,
@@ -895,14 +876,12 @@ class Relatorios
 		{
 			echo 'Erro';
 		}
-		$mysqli->close();
 	}
 	
 	
 	public function ContaDepositoPendente()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call conta_deposito_pendente();";
 		$result = $mysqli->query($sql);
@@ -927,13 +906,11 @@ class Relatorios
 		
 		return $total;
 		
-		$mysqli->close();
 	}
 
     public function RelatorioPorAnestesista($mes,$ano)
     {
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_equipe_periodo('$mes','$ano');";
 		$result = $mysqli->query($sql);
@@ -982,7 +959,6 @@ class Relatorios
 			}
 		}
 		
-		$mysqli->close();
     }
 	
 	public function RetornaSomaClientesPeriodo($dataInicio,$dataFim,$cliente)
@@ -992,8 +968,7 @@ class Relatorios
 		$dataInicio = $cadastro->converteData($dataInicio);
 		$dataFim = $cadastro->converteData($dataFim);
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_clientes_periodo('$dataInicio','$dataFim','$cliente');";
 		$result = $mysqli->query($sql);
@@ -1074,13 +1049,11 @@ class Relatorios
 			}		
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function RetornaCirurgiaPorCliente($dataInicio, $dataFim, $cliente, $total) {
 	
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "select
                 s.cirurgia,
@@ -1136,8 +1109,7 @@ class Relatorios
 		$dataInicio = $cadastro->converteData($dataInicio);
 		$dataFim = $cadastro->converteData($dataFim);
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_cirurgia_periodo('$dataInicio','$dataFim','$cirurgia');";
 		$result = $mysqli->query($sql);
@@ -1193,7 +1165,6 @@ class Relatorios
 			}		
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function RetornaSomaPagamentoPeriodo($dataInicio,$dataFim,$pagamento)
@@ -1203,8 +1174,7 @@ class Relatorios
 		$dataInicio = $cadastro->converteData($dataInicio);
 		$dataFim = $cadastro->converteData($dataFim);
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_formaPagamento_periodo('$dataInicio','$dataFim','$pagamento');";
 		$result = $mysqli->query($sql);
@@ -1260,7 +1230,6 @@ class Relatorios
 			}		
 		}
 		
-		$mysqli->close();
 	}
 	
 	
@@ -1271,8 +1240,7 @@ class Relatorios
 		$dataInicio = $cadastro->converteData($dataInicio);
 		$dataFim = $cadastro->converteData($dataFim);
 		
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_impostos_periodo('$dataInicio','$dataFim');";
 		$result = $mysqli->query($sql);
@@ -1330,13 +1298,11 @@ class Relatorios
 			}		
 		}
 		
-		$mysqli->close();
 	}
 	
 	public function RetornaSomaDepositoPendente()
 	{
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		
 		$sql = "call retorna_soma_depositoPendente('')";
 		$result = $mysqli->query($sql);
@@ -1367,8 +1333,7 @@ class Relatorios
 
 		$total = 0;
 
-		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
-		$mysqli->set_charset('utf8');
+		$mysqli = conexao::pegar();
 		$sql = "select distinct date_format(data_servico, '%Y%m') from servicos";
 		$result = $mysqli->query($sql);
 		if($result) {

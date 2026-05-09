@@ -2,12 +2,32 @@
 
 class conexao
 {
+	// Conexao compartilhada por request - evita reabrir handshake TCP/auth em cada metodo
+	private static $sharedConn = null;
+
 	public $status;
 	private $conn;
 	private $host;
 	private $user;
 	private $pass;
 	private $database;
+
+	// Retorna conexao singleton - cria na 1a chamada, reutiliza nas seguintes dentro do mesmo request
+	public static function pegar(): mysqli
+	{
+		if (self::$sharedConn instanceof mysqli) {
+			return self::$sharedConn;
+		}
+		$instance = new self();
+		self::$sharedConn = mysqli_connect(
+			$instance->host,
+			$instance->user,
+			$instance->pass,
+			$instance->database
+		);
+		mysqli_set_charset(self::$sharedConn, 'utf8');
+		return self::$sharedConn;
+	}
 
 	public function __construct()
     {

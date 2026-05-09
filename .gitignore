@@ -33,3 +33,4 @@ financeiro/autocomplete/conexao.class.php
 # Snapshots gerados por automação de browser (Playwright MCP)
 .playwright-mcp/
 financeiro/.playwright-mcp/
+financeiro/.env.remoto.backup

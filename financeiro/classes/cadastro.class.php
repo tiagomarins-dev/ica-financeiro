@@ -559,11 +559,6 @@ class cadastro
 			$result = $mysqli->query($sql);
 			if($result)
 			{
-				// Atualiza resumo_mensal do mes do servico cadastrado
-				if (preg_match('/^(\d{4})-(\d{2})/', $this->dataCadastro, $matchData)) {
-					$this->recomputarResumoMes((int)$matchData[1], (int)$matchData[2]);
-				}
-
 				echo '	<script>
 						alert("Serviço cadastrado com sucesso!");
 						document.location.href = "?s=home";
@@ -640,10 +635,6 @@ class cadastro
 			$idSite = md5($this->idServico);
 		
 			if($result) {
-				// Atualiza resumo_mensal do mes do servico editado
-				if (preg_match('/^(\d{4})-(\d{2})/', $this->dataCadastro, $matchData)) {
-					$this->recomputarResumoMes((int)$matchData[1], (int)$matchData[2]);
-				}
 				echo '	<script>
 							alert("Serviço editado com sucesso!");
 							document.location.href = "?s=detalhes&id='.$idSite.'";
@@ -686,8 +677,6 @@ class cadastro
 		$result = $mysqli->query($sql);
 		if($result)
 		{
-			// Apos delete o mes do servico ja se foi - recomputa todos os meses recentes pra garantir
-			$this->recomputarResumoMes();
 			echo '<script>alert("O serviço foi excluído com sucesso!");</script>';
 		}
 	}
@@ -702,7 +691,6 @@ class cadastro
 		$result = $mysqli->query($sql);
 		if($result)
 		{
-			$this->recomputarResumoMes();
 			echo '<script>alert("A despesa foi excluída com sucesso!");</script>';
 		}
 	}
@@ -720,10 +708,6 @@ class cadastro
 			$result = $mysqli->query($sql);
 			if($result)
 			{
-				// Atualiza resumo_mensal do mes da despesa
-				if (preg_match('/^(\d{4})-(\d{2})/', $this->dataDespesa, $matchData)) {
-					$this->recomputarResumoMes((int)$matchData[1], (int)$matchData[2]);
-				}
 				echo '<div class="alert alert-success fade in" role="alert">
 						<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
 						<h4>Despesa cadastrada com sucesso!!!</h4>
@@ -2876,51 +2860,6 @@ class cadastro
 		}
 
 		return false;
-	}
-
-	// Recalcula a linha de resumo_mensal para um mes especifico (ano, mes inteiros)
-	// Chamar apos qualquer alteracao em servicos/pagamentos/despesas que afete o mes.
-	// Sem parametros, recalcula o mes atual.
-	public function recomputarResumoMes($ano = null, $mes = null) {
-		if ($ano === null) { $ano = (int) date('Y'); }
-		if ($mes === null) { $mes = (int) date('n'); }
-
-		$mysqli = conexao::pegar();
-		$stmt = $mysqli->prepare("
-			INSERT INTO resumo_mensal (ano, mes, total_bruto, total_descontos, total_desconto_cartao, total_com_nota, total_sem_nota, total_liquido, total_despesas)
-			SELECT s_data.ano, s_data.mes,
-			       s_data.total_bruto, s_data.total_descontos, s_data.total_desconto_cartao,
-			       s_data.total_com_nota, s_data.total_sem_nota, s_data.total_liquido,
-			       COALESCE(d.total_despesas, 0)
-			FROM (
-			    SELECT YEAR(s.data_servico) AS ano, MONTH(s.data_servico) AS mes,
-			           COALESCE(SUM(p.valor_bruto),0) AS total_bruto,
-			           COALESCE(SUM(s.valor_desconto),0) AS total_descontos,
-			           COALESCE(SUM(p.valor_bruto),0) - COALESCE(SUM(p.valor_final),0) - COALESCE(SUM(s.valor_desconto),0) AS total_desconto_cartao,
-			           COALESCE(SUM(CASE WHEN p.nota='S' THEN p.valor_bruto ELSE 0 END),0) AS total_com_nota,
-			           COALESCE(SUM(CASE WHEN p.nota='N' THEN p.valor_bruto ELSE 0 END),0) AS total_sem_nota,
-			           COALESCE(SUM(p.valor_final),0) AS total_liquido
-			    FROM servicos s
-			    LEFT JOIN pagamentos p ON p.id_servico = s.id
-			    WHERE YEAR(s.data_servico) = ? AND MONTH(s.data_servico) = ?
-			    GROUP BY YEAR(s.data_servico), MONTH(s.data_servico)
-			) s_data
-			LEFT JOIN (
-			    SELECT YEAR(data_despesa) AS ano, MONTH(data_despesa) AS mes, SUM(valor_despesa) AS total_despesas
-			    FROM despesas_mensais
-			    WHERE YEAR(data_despesa) = ? AND MONTH(data_despesa) = ?
-			) d ON d.ano = s_data.ano AND d.mes = s_data.mes
-			ON DUPLICATE KEY UPDATE
-			    total_bruto           = VALUES(total_bruto),
-			    total_descontos       = VALUES(total_descontos),
-			    total_desconto_cartao = VALUES(total_desconto_cartao),
-			    total_com_nota        = VALUES(total_com_nota),
-			    total_sem_nota        = VALUES(total_sem_nota),
-			    total_liquido         = VALUES(total_liquido),
-			    total_despesas        = VALUES(total_despesas)
-		");
-		$stmt->bind_param('iiii', $ano, $mes, $ano, $mes);
-		$stmt->execute();
 	}
 
 }

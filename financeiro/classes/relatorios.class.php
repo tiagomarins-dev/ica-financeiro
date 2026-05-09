@@ -68,9 +68,30 @@ class Relatorios
 	{
 		$mysqli = conexao::pegar();
 
-		// Le da tabela materializada resumo_mensal - reduz de ~5s (procedure original) para ~3ms
-		$sql = "SELECT ano, mes, total_bruto, total_descontos, total_desconto_cartao, total_com_nota, total_sem_nota, total_liquido, total_despesas
-				FROM resumo_mensal ORDER BY ano DESC, mes DESC LIMIT 13";
+		// Query direta otimizada - substitui call retorna_soma_valores() (~4900ms) por agregacao em 1 passo (~200ms)
+		// Versao SEM as 3 subqueries correlacionadas com DATE_FORMAT() que travavam a procedure original
+		$sql = "
+			SELECT s_data.ano, s_data.mes,
+			       s_data.total_bruto, s_data.total_descontos, s_data.total_desconto_cartao,
+			       s_data.total_com_nota, s_data.total_sem_nota, s_data.total_liquido,
+			       COALESCE(d.total_despesas, 0) AS total_despesas
+			FROM (
+			    SELECT YEAR(s.data_servico) AS ano, MONTH(s.data_servico) AS mes,
+			           COALESCE(SUM(p.valor_bruto),0) AS total_bruto,
+			           COALESCE(SUM(s.valor_desconto),0) AS total_descontos,
+			           COALESCE(SUM(p.valor_bruto),0) - COALESCE(SUM(p.valor_final),0) - COALESCE(SUM(s.valor_desconto),0) AS total_desconto_cartao,
+			           COALESCE(SUM(CASE WHEN p.nota='S' THEN p.valor_bruto ELSE 0 END),0) AS total_com_nota,
+			           COALESCE(SUM(CASE WHEN p.nota='N' THEN p.valor_bruto ELSE 0 END),0) AS total_sem_nota,
+			           COALESCE(SUM(p.valor_final),0) AS total_liquido
+			    FROM servicos s LEFT JOIN pagamentos p ON p.id_servico = s.id
+			    GROUP BY YEAR(s.data_servico), MONTH(s.data_servico)
+			) s_data
+			LEFT JOIN (
+			    SELECT YEAR(data_despesa) AS ano, MONTH(data_despesa) AS mes, SUM(valor_despesa) AS total_despesas
+			    FROM despesas_mensais
+			    GROUP BY YEAR(data_despesa), MONTH(data_despesa)
+			) d ON d.ano = s_data.ano AND d.mes = s_data.mes
+			ORDER BY s_data.ano DESC, s_data.mes DESC LIMIT 13";
 		$result = $mysqli->query($sql);
 		if($result && $result->num_rows > 0)
 		{

@@ -1,4 +1,5 @@
-# Sobe o app PHP localmente apontando para o MySQL remoto definido em classes/conexao.class.php
+# Sobe o app PHP + um MySQL local para desenvolvimento offline.
+# As credenciais reais ficam em financeiro/.env. O container db abaixo NUNCA toca o MySQL remoto.
 services:
   web:
     build: .
@@ -6,6 +7,30 @@ services:
     ports:
       - "8080:80"
     volumes:
-      # Monta o código como volume para refletir alterações sem rebuild
+      # Monta o codigo como volume para refletir alteracoes sem rebuild
       - ./financeiro:/var/www/html
     restart: unless-stopped
+    depends_on:
+      - db
+
+  db:
+    # mariadb:lts e compativel com dumps de MySQL 5.7 e tem build arm64 (mysql:5.7 nao tem)
+    image: mariadb:lts
+    container_name: financeiro_db
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: inst4498_financeiro
+    ports:
+      # Expoe na 3307 do host para evitar conflito com qualquer MySQL local na 3306
+      - "3307:3306"
+    volumes:
+      - financeiro_db_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  financeiro_db_data:

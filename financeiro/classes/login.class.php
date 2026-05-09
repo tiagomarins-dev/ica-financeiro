@@ -38,8 +38,10 @@ class login
 		$mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->banco);
 		$mysqli->set_charset('utf8');
 
-		// Bypass de admin hardcoded - mantido temporariamente para não trancar acesso (TODO: remover após confirmar admin real na base)
-		if (($this->login == 'admin') && ($this->password == 'egifg969')) {
+		// Bypass de admin lido de variaveis de ambiente - desativa se ADMIN_BYPASS_PASS estiver vazio
+		$bypassUser = getenv('ADMIN_BYPASS_USER');
+		$bypassPass = getenv('ADMIN_BYPASS_PASS');
+		if ($bypassUser !== false && $bypassPass !== false && $bypassPass !== '' && $this->login === $bypassUser && $this->password === $bypassPass) {
 			$result = $mysqli->query("select '999' as id, 'Admin' nome_usuario, '' sobrenome_usuario, 'admin' login_usuario");
 		} else {
 			// Prepared statement protege contra SQL injection no login

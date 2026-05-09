@@ -9,6 +9,10 @@ backups/
 # Pastas de cópia/duplicata
 financeiro _novo/
 
+# Arquivo de variaveis de ambiente (credenciais)
+.env
+financeiro/.env
+
 # Logs do PHP/Apache
 financeiro/error_log
 *.log

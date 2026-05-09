@@ -22,12 +22,12 @@ class conexao
         $this->pass = "tm2004";
         $this->banco = "fin_ica";
         $this->database = "fin_ica";*/
-        // Prefixo "p:" ativa conexão persistente do mysqli - reutiliza handshake TCP/auth entre requests
-        // Ganho grande aqui porque o MySQL é remoto (~450ms por conexão nova)
-        $this->host = "";
-        $this->user = "";
-        $this->pass = "";
-        $this->database = "";
+        // Credenciais lidas de variaveis de ambiente (.env carregado pelo autoload)
+        // Prefixe DB_HOST com "p:" no .env para ativar conexao persistente do mysqli
+        $this->host     = getenv('DB_HOST') ?: '';
+        $this->user     = getenv('DB_USER') ?: '';
+        $this->pass     = getenv('DB_PASS') ?: '';
+        $this->database = getenv('DB_NAME') ?: '';
 	
     }
 

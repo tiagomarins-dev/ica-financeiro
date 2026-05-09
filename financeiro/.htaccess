@@ -17,6 +17,14 @@ RemoveHandler .php
 RemoveHandler .php5
 AddHandler application/x-httpd-php .php
 
+# Bloqueia acesso ao .env por HTTP (credenciais sensiveis)
+<Files ".env">
+    Require all denied
+</Files>
+<Files ".env.example">
+    Require all denied
+</Files>
+
 # Forçar PHP 8.3
 #<IfModule mime_module>
   # AddHandler application/x-httpd-ea-php83 .php .php8 .phtml

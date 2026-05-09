@@ -1,0 +1,48 @@
+<script>
+var $j = jQuery.noConflict();
+$j(function() {
+function split( val ) {
+return val.split( /,\s*/ );
+}
+function extractLast( term ) {
+return split( term ).pop();
+}
+$j( "#ult_despachonaocontem" )
+.bind( "keydown", function( event ) {
+if ( event.keyCode === $j.ui.keyCode.TAB &&
+$j( this ).data( "autocomplete" ).menu.active ) {
+event.preventDefault();
+}
+})
+.autocomplete({
+source: function( request, response ) {
+$j.getJSON( "search/search_despacho.php", {
+term: extractLast( request.term )
+}, response );
+},
+search: function() {
+var term = extractLast( this.value );
+if ( term.length < 1 ) {
+return false;
+}
+},
+focus: function() {
+return false;
+},
+select: function( event, ui ) {
+var terms = split( this.value );
+terms.pop();
+terms.push( ui.item.value );
+terms.push( "" );
+this.value = terms.join( ", " );
+return false;
+}
+})
+.data( "autocomplete" )._renderItem = function( ul, item ) {
+return $j( "<li></li>" )
+.data( "item.autocomplete", item )
+.append( "<a><strong>" + item.label + "</strong> - " + item.id + "</a>" )
+.appendTo( ul );
+};
+})
+</script>  

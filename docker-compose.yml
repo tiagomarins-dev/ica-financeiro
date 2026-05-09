@@ -1,0 +1,11 @@
+# Sobe o app PHP localmente apontando para o MySQL remoto definido em classes/conexao.class.php
+services:
+  web:
+    build: .
+    container_name: financeiro_web
+    ports:
+      - "8080:80"
+    volumes:
+      # Monta o código como volume para refletir alterações sem rebuild
+      - ./financeiro:/var/www/html
+    restart: unless-stopped

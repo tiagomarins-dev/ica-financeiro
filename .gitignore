@@ -1,0 +1,31 @@
+# Dumps e backups do banco
+backups/
+*.sql
+*.sql.gz
+
+# Arquivos zip de cópia/backup do código
+*.zip
+
+# Pastas de cópia/duplicata
+financeiro _novo/
+
+# Logs do PHP/Apache
+financeiro/error_log
+*.log
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos PHP duplicados/órfãos com credenciais antigas (já não usados pelo sistema)
+financeiro/conexao.class.php
+financeiro/autocomplete/conexao.class.php
+
+# Configurações do editor / IDE
+.idea/
+.vscode/
+*.swp
+
+# Snapshots gerados por automação de browser (Playwright MCP)
+.playwright-mcp/
+financeiro/.playwright-mcp/

@@ -16,6 +16,14 @@ class conexao
 	public static function pegar(): mysqli
 	{
 		if (self::$sharedConn instanceof mysqli) {
+			// Drena resultsets pendentes de chamadas anteriores (stored procedures deixam extras)
+			// Sem isso, a proxima query falha com "Commands out of sync" pois a conexao e compartilhada
+			while (self::$sharedConn->more_results()) {
+				self::$sharedConn->next_result();
+				if ($extra = self::$sharedConn->store_result()) {
+					$extra->free();
+				}
+			}
 			return self::$sharedConn;
 		}
 		$instance = new self();

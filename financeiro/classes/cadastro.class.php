@@ -280,11 +280,14 @@ class cadastro
 		
 		$mysqli = conexao::pegar();
 		
-		$sql = "select 
-						date_format(data_servico,'%Y-%m') mesesServico, 
-						date_format(data_servico,'%m') mes, 
-						date_format(data_servico,'%Y') ano  
-				from servicos group by 1 order by 1 desc;";
+		// YEAR/MONTH em vez de DATE_FORMAT - permite uso do indice data_servico
+		$sql = "select
+						concat(YEAR(data_servico), '-', LPAD(MONTH(data_servico), 2, '0')) mesesServico,
+						LPAD(MONTH(data_servico), 2, '0') mes,
+						YEAR(data_servico) ano
+				from servicos
+				group by YEAR(data_servico), MONTH(data_servico)
+				order by YEAR(data_servico) desc, MONTH(data_servico) desc;";
 		$result = $mysqli->query($sql);
 		if($result)
 		{
@@ -317,11 +320,14 @@ class cadastro
 		
 		$mysqli = conexao::pegar();
 		
-		$sql = "select 
-						date_format(data_servico,'%Y-%m') mesesServico, 
-						date_format(data_servico,'%m') mes, 
-						date_format(data_servico,'%Y') ano  
-				from servicos group by 1 order by 1 desc;";
+		// YEAR/MONTH em vez de DATE_FORMAT - permite uso do indice data_servico
+		$sql = "select
+						concat(YEAR(data_servico), '-', LPAD(MONTH(data_servico), 2, '0')) mesesServico,
+						LPAD(MONTH(data_servico), 2, '0') mes,
+						YEAR(data_servico) ano
+				from servicos
+				group by YEAR(data_servico), MONTH(data_servico)
+				order by YEAR(data_servico) desc, MONTH(data_servico) desc;";
 		$result = $mysqli->query($sql);
 		
 		if($result)
@@ -355,11 +361,14 @@ class cadastro
 		
 		$mysqli = conexao::pegar();
 		
-		$sql = "select 
-						date_format(data_servico,'%Y-%m') mesesServico, 
-						date_format(data_servico,'%m') mes, 
-						date_format(data_servico,'%Y') ano  
-				from servicos group by 1 order by 1 desc;";
+		// YEAR/MONTH em vez de DATE_FORMAT - permite uso do indice data_servico
+		$sql = "select
+						concat(YEAR(data_servico), '-', LPAD(MONTH(data_servico), 2, '0')) mesesServico,
+						LPAD(MONTH(data_servico), 2, '0') mes,
+						YEAR(data_servico) ano
+				from servicos
+				group by YEAR(data_servico), MONTH(data_servico)
+				order by YEAR(data_servico) desc, MONTH(data_servico) desc;";
 		$result = $mysqli->query($sql);
 		
 		if($result)

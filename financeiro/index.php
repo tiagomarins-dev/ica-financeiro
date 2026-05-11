@@ -34,7 +34,9 @@
 	}
 	
 	
-	$cadastro->InsereVisitas($usuario, $ip, $sistema, $pagina);
+	// Desativado por motivo de performance - tabela visitas e write-only e nao e consultada em lugar algum.
+	// Cada chamada custava ~140ms de roundtrip ao MySQL remoto. Para reativar, descomente a linha abaixo.
+	// $cadastro->InsereVisitas($usuario, $ip, $sistema, $pagina);
 	
 	$TotalDepPendente = $relatorio->ContaDepositoPendente();
 	

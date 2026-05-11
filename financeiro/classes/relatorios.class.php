@@ -890,30 +890,27 @@ class Relatorios
 	}
 	
 	
+	// Cache em memoria para evitar 2 queries quando a home tambem chama RetornaSomaDepositoPendente
+	private static $cacheDepositoPendente = null;
+
+	private static function carregarDepositoPendente() {
+		if (self::$cacheDepositoPendente !== null) return self::$cacheDepositoPendente;
+		$mysqli = conexao::pegar();
+		// 1 query unica retorna count e sum - evita rodar 2 procedures (conta_deposito_pendente + retorna_soma_depositoPendente)
+		$sql = "select count(s.id) total_count, COALESCE(sum(p.valor_final),0) total_soma
+		        from servicos s
+		        left join pagamentos p on p.id_servico = s.id
+		        where p.depositado = 'N' and p.id_pagamento in (1,2,6)";
+		$result = $mysqli->query($sql);
+		$row = $result ? $result->fetch_assoc() : ['total_count'=>0,'total_soma'=>0];
+		self::$cacheDepositoPendente = $row;
+		return $row;
+	}
+
 	public function ContaDepositoPendente()
 	{
-		$mysqli = conexao::pegar();
-		
-		$sql = "call conta_deposito_pendente();";
-		$result = $mysqli->query($sql);
-		if($result)
-		{
-			$RecordCount = $result->num_rows;
-			if($RecordCount > 0)
-			{
-				$rows = $result->fetch_assoc();
-				
-				$total = $rows['total'];
-			}
-			else
-			{
-				$total = '';
-			}
-		}
-		else
-		{
-			$total = '';
-		}
+		$row = self::carregarDepositoPendente();
+		$total = $row['total_count'];
 		
 		return $total;
 		
@@ -1313,28 +1310,28 @@ class Relatorios
 	
 	public function RetornaSomaDepositoPendente()
 	{
-		$mysqli = conexao::pegar();
-		
-		$sql = "call retorna_soma_depositoPendente('')";
-		$result = $mysqli->query($sql);
-		
-		if($result) {
-		
-			$RecordCount = $result->num_rows;
-			
-			$cadastro = new cadastro();
-			
+		// Reusa o cache de carregarDepositoPendente() - evita 2a query quando ContaDepositoPendente ja foi chamada
+		$row = self::carregarDepositoPendente();
+		$cadastro = new cadastro();
+		return $cadastro->converteValorSite($row['total_soma']);
+		// codigo abaixo eh dead code (mantido para diff minimo)
+		if(false) {
+
+			$RecordCount = 0;
+
+
+
 			if($RecordCount > 0) {
-				
-				$rows = $result->fetch_assoc();
-				
+
+				$rows = [];
+
 				return $cadastro->converteValorSite($rows['total']);
-				
+
 			}
 			else {
-			
+
 				return $cadastro->converteValorSite('0');
-			
+
 			}
 		
 		}		

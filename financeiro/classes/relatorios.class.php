@@ -96,22 +96,20 @@ class Relatorios
 		if($result && $result->num_rows > 0)
 		{
 			echo '
-					<table class="table table-striped table-bordered table-hover">
-					<thead>
-					<tr>
-					<th>Mês/Ano</th>
-
-					<th>Notas Emitidas</th>
-					<th>Gratuidade</th>
-					<th>Faturamento bruto</th>
-					<th>Total Desconto Cartão</th>
-
-
-					<th>Despesas</th>
-					<th>Líquido</th>
-					</tr>
-					</thead>
-					<tbody>
+				<div class="overflow-x-auto">
+				<table class="w-full text-sm">
+				<thead class="bg-slate-50 border-b border-slate-200">
+				<tr class="text-left text-xs font-medium text-slate-600 uppercase tracking-wide">
+					<th class="px-4 py-3">Mês / Ano</th>
+					<th class="px-4 py-3 text-right">Notas Emitidas</th>
+					<th class="px-4 py-3 text-right">Gratuidade</th>
+					<th class="px-4 py-3 text-right">Faturamento</th>
+					<th class="px-4 py-3 text-right">Desc. Cartão</th>
+					<th class="px-4 py-3 text-right">Despesas</th>
+					<th class="px-4 py-3 text-right">Líquido</th>
+				</tr>
+				</thead>
+				<tbody class="divide-y divide-slate-100">
 			';
 
 			while($rows = $result->fetch_assoc())
@@ -129,28 +127,27 @@ class Relatorios
 				$this->totalSaldo = $cadastro->converteValorSiteSaldo($this->totalSaldo);
 
 				echo '
-						<tr>
-						<td>'.$this->mesAno.'</td>
-						<td>'.$this->totalComNota.'</td>
-						<td>'.$this->totalSemNota.'</td>
-						<td><strong>'.$this->totalBruto.'</strong></td>
-						<td>'.$this->totalDescntoCartao.'</td>
-
-
-						<td>'.$this->totalDespesas.'</td>
-						<td>'.$this->totalSaldo.'</td>
-						</tr>
+					<tr class="hover:bg-slate-50 transition-colors">
+						<td class="px-4 py-3 font-medium text-slate-900">'.$this->mesAno.'</td>
+						<td class="px-4 py-3 text-right tabular-nums text-slate-700">'.$this->totalComNota.'</td>
+						<td class="px-4 py-3 text-right tabular-nums text-slate-700">'.$this->totalSemNota.'</td>
+						<td class="px-4 py-3 text-right tabular-nums font-semibold text-slate-900">'.$this->totalBruto.'</td>
+						<td class="px-4 py-3 text-right tabular-nums text-slate-600">'.$this->totalDescntoCartao.'</td>
+						<td class="px-4 py-3 text-right tabular-nums text-slate-600">'.$this->totalDespesas.'</td>
+						<td class="px-4 py-3 text-right tabular-nums font-semibold text-emerald-700">'.$this->totalSaldo.'</td>
+					</tr>
 				';
 			}
 
 			echo '
-					</tbody>
-					</table>
+				</tbody>
+				</table>
+				</div>
 			';
 		}
 		else
 		{
-			echo 'Sem Registros';
+			echo '<div class="px-5 py-10 text-center text-sm text-slate-500">Sem registros</div>';
 		}
 	}
 

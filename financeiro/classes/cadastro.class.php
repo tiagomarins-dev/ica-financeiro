@@ -295,25 +295,22 @@ class cadastro
 			if($RecordCount > 0)
 			{
 				$mesAnoSite = $this->RenomeiaMeses($mes,$ano);
-				echo '<li role="presentation"><a role="menuitem" tabindex="-1" href="index.php?m='.$mes.'&a='.$ano.'">'.$mesAnoSite.'</a></li>';
-				
+				$itemClasses = 'block px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700 rounded-md cursor-pointer transition-colors';
+				echo '<li><a class="'.$itemClasses.' bg-brand-50 text-brand-700 font-medium" href="index.php?m='.$mes.'&a='.$ano.'">'.$mesAnoSite.'</a></li>';
+
 				while($rows = $result->fetch_assoc())
 				{
 					$data = $this->RenomeiaMeses($rows['mes'],$rows['ano']);
-					
+
 					if($rows['mesesServico'] != $AnoMes)
 					{
-						echo '<li role="presentation"><a role="menuitem" tabindex="-1" href="index.php?m='.$rows['mes'].'&a='.$rows['ano'].'">'.$data.'</a></li>';
-					}					
+						echo '<li><a class="'.$itemClasses.'" href="index.php?m='.$rows['mes'].'&a='.$rows['ano'].'">'.$data.'</a></li>';
+					}
 				}
 			}
-			else
-			{
-				
-			}
-		}		
-	}	
-	
+		}
+	}
+
 	public function ListaMesesStats($mes,$ano)
 	{
 		$AnoMes = $ano . '-' . $mes;
@@ -829,92 +826,82 @@ class cadastro
 		if($result)
 		{
 			$RecordCount = $result->num_rows;
-			
+
 			if($RecordCount > 0)
 			{
 				echo '
-						<div class="table-responsive">
-						<table class="table table-striped table-hover" style="font-size:12px;">
-						<thead>
-						<tr>
-						<th>Data</th>
-						<th>Cliente</th>
-						<th>Atendimento</th>
-						<th>Paciente</th>
-						<!-- <th>Cirurgia</th> -->
-						<!-- <th style="text-align:center">Valor Bruto</th> -->
-						<!-- <th style="text-align:center">Valor NF</th> -->
-						<th style="text-align:center">Valor Final</th>
-						<!-- <th style="text-align:center">Desconto</th> -->
-						<th style="text-align:center">Forma de Pagamento</th>
-						<th width="2%" style="text-align:center">Recebido</th>
-						<!--<th width="2%" style="text-align:center">Depositado</th>-->
-						<th width="5%"></th>
-						<th width="5%"></th>
-						</tr>
-						</thead>
-						<tbody>				
-				';			
-				
+					<div class="overflow-x-auto">
+					<table class="w-full text-sm">
+					<thead class="bg-slate-50 border-b border-slate-200">
+					<tr class="text-left text-xs font-medium text-slate-600 uppercase tracking-wide">
+						<th class="px-4 py-3">Data</th>
+						<th class="px-4 py-3">Cliente</th>
+						<th class="px-4 py-3">Atendimento</th>
+						<th class="px-4 py-3">Paciente</th>
+						<th class="px-4 py-3 text-right">Valor</th>
+						<th class="px-4 py-3">Pagamento</th>
+						<th class="px-4 py-3 text-center">Recebido</th>
+						<th class="px-4 py-3"></th>
+					</tr>
+					</thead>
+					<tbody class="divide-y divide-slate-100">
+				';
+
 				while($rows = $result->fetch_assoc())
 				{
-					
-					$valorServico = $this->converteValorSite($rows['valor_bruto']);
 					$valorFinal = $this->converteValorSite($rows['valor_final']);
-					$valorDesconto = $this->converteValorSite($rows['valor_desconto']);
-					
-					$recebido = ($rows['recebido'] == 'S') ? '<span class="glyphicon glyphicon-ok" style="color:#4cae4c; font-size:16px;"></span>' : '';
-					$depositado = ($rows['depositado'] == 'S') ? '<span class="glyphicon glyphicon-ok" style="color:#4cae4c; font-size:16px;"></span>' : '';
-					
-					$compensado = ($rows['compensado'] == 'N') ? '<span class="glyphicon glyphicon-remove" style="color:#c12e2a; font-size:12px;"></span>' : '';
-					
-					echo '
-						  <tr style="vertical-align: middle;">
-						  <td>'.$rows['data_servico'].'</td>
-						  <td valign="middle">'.$rows['cliente'].'</td>
-						  <td valign="middle">'.$rows['atendimento'].'</td>
-						  <td valign="middle">'.$rows['nome_paciente'].'</td>
-						  <!-- <td>'.$rows['cirurgia'].'</td> -->
-						  <!-- <td align="center">'.$valorServico.'</td> -->
-						  <!-- <td align="center">'.$valorFinal.'</td> -->
-						  <td align="center">'.$valorFinal.'</td>
-						  <!-- <td align="center">'.$valorDesconto.'</td> -->
-						  <td align="center">'.$rows['tipoPagamento'].' '.$compensado.'</td>
-						  <td align="center">'.$recebido.'</td>
-						  <!--<td align="center">'.$depositado.'</td>-->
-						  <td align="center">
-						  	<a href="?s=detalhes&id='.md5($rows['id']).'">
-								<button type="submit" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit"></span>&nbsp&nbspDetalhes</button>
-							</a>
-						</td>
-						  <td align="center">
-						  	<form name="delServico" action="index.php" method="post" onsubmit="return ConfirmaDelete();">
-						  		<input type="hidden" name="txtIdServico" value="'.$rows['id'].'" />
-						  		<button type="submit" class="btn btn-danger btn-xs" name="btnDelServico"><span class="glyphicon glyphicon-trash"></span>&nbsp&nbspExcluir</button>
-						    </form>
-						  </td>
-						  </tr>
-					
-					';
-				}	
 
-				
-				
+					$recebido = ($rows['recebido'] == 'S')
+						? '<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200" title="Recebido"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg></span>'
+						: '<span class="inline-block w-6 h-6 rounded-full bg-slate-100 ring-1 ring-slate-200" title="Pendente"></span>';
+
+					$compensado = ($rows['compensado'] == 'N')
+						? '<span class="ml-1 inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded bg-red-50 text-red-700 ring-1 ring-red-200" title="Cheque nao compensado">Não comp.</span>'
+						: '';
+
+					echo '
+						<tr class="hover:bg-slate-50 transition-colors">
+							<td class="px-4 py-3 whitespace-nowrap text-slate-700">'.$rows['data_servico'].'</td>
+							<td class="px-4 py-3 text-slate-900 font-medium">'.$rows['cliente'].'</td>
+							<td class="px-4 py-3 text-slate-700">'.$rows['atendimento'].'</td>
+							<td class="px-4 py-3 text-slate-700">'.$rows['nome_paciente'].'</td>
+							<td class="px-4 py-3 text-right tabular-nums font-semibold text-slate-900">'.$valorFinal.'</td>
+							<td class="px-4 py-3 text-slate-600">'.$rows['tipoPagamento'].' '.$compensado.'</td>
+							<td class="px-4 py-3 text-center">'.$recebido.'</td>
+							<td class="px-4 py-3">
+								<div class="flex items-center justify-end gap-1.5">
+									<a href="?s=detalhes&id='.md5($rows['id']).'" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 rounded ring-1 ring-brand-200 cursor-pointer transition-colors" title="Detalhes">
+										<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487 18.549 2.799a2.121 2.121 0 1 1 3 3L5.232 22.117a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/></svg>
+										Detalhes
+									</a>
+									<form action="index.php" method="post" onsubmit="return ConfirmaDelete();" class="inline">
+										<input type="hidden" name="txtIdServico" value="'.$rows['id'].'" />
+										<button type="submit" name="btnDelServico" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded ring-1 ring-red-200 cursor-pointer transition-colors" title="Excluir">
+											<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
+											Excluir
+										</button>
+									</form>
+								</div>
+							</td>
+						</tr>
+					';
+				}
+
 				echo '
-						</tbody>
-						</table>
+					</tbody>
+					</table>
+					</div>
+					<a name="final"></a>
 				';
-				echo '<a name="final" />';
 			}
 			else
 			{
-				echo '<h3 style="margin:20px;">Sem registros</h3>';
+				echo '<div class="px-5 py-10 text-center text-sm text-slate-500">Sem registros para este mês</div>';
 			}
 		}
 		else
 		{
-            echo $mysqli->error;
-			echo 'Erro';
+			echo '<div class="px-5 py-4 text-sm text-red-600">Erro: '.$mysqli->error.'</div>';
 		}
 	}
 
@@ -1365,49 +1352,54 @@ class cadastro
 			$RecordCount = $result->num_rows;
 			if($RecordCount > 0)
 			{
-				echo "
-						<div class=\"table-responsive\">
-            			<table class=\"table table-striped table-hover\">
-              			<thead>
-                		<tr>
-						<th>Data</th>
-	              		<th>Despesa</th>	
-                  		<th>Total</th>
-						<th></th>
-                		</tr>
-              			</thead>
-              			<tbody>				
-				";
-				
+				echo '
+					<div class="overflow-x-auto">
+					<table class="w-full text-sm">
+					<thead class="bg-slate-50 border-b border-slate-200">
+					<tr class="text-left text-xs font-medium text-slate-600 uppercase tracking-wide">
+						<th class="px-4 py-3">Data</th>
+						<th class="px-4 py-3">Despesa</th>
+						<th class="px-4 py-3 text-right">Valor</th>
+						<th class="px-4 py-3"></th>
+					</tr>
+					</thead>
+					<tbody class="divide-y divide-slate-100">
+				';
+
 				while($rows = $result->fetch_assoc())
 				{
 					echo '
-							<tr>
-							<td>'.$rows['dataDespesa'].'</td>
-                  			<td><strong>'.$rows['despesa'].'</strong> <br /><i>'.$rows['descricao'].'</i></td>
-                 			<td>'.$rows['valor_despesa'].'</td>
-							<td>
-						 	<form name="delServico" action="index.php?m='.$mes.'&a='.$ano.'" method="post" onsubmit="return ConfirmaDelete();">
-						  	<input type="hidden" name="txtIdServico" value="'.$rows['id'].'" />
-						  	<input type="submit" class="btn btn-danger btn-xs" name="btnDelDespesa" value="Excluir" />
-						  	</form>
-						 	</td>
-                			</tr>
-              				<tr>
+						<tr class="hover:bg-slate-50 transition-colors">
+							<td class="px-4 py-3 whitespace-nowrap text-slate-700">'.$rows['dataDespesa'].'</td>
+							<td class="px-4 py-3">
+								<div class="font-medium text-slate-900">'.$rows['despesa'].'</div>
+								'.($rows['descricao'] ? '<div class="text-xs text-slate-500 mt-0.5">'.$rows['descricao'].'</div>' : '').'
+							</td>
+							<td class="px-4 py-3 text-right tabular-nums font-semibold text-slate-900">'.$rows['valor_despesa'].'</td>
+							<td class="px-4 py-3 text-right">
+								<form action="index.php?m='.$mes.'&a='.$ano.'" method="post" onsubmit="return ConfirmaDelete();" class="inline">
+									<input type="hidden" name="txtIdServico" value="'.$rows['id'].'" />
+									<button type="submit" name="btnDelDespesa" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded ring-1 ring-red-200 cursor-pointer transition-colors">
+										<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166M18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79"/></svg>
+										Excluir
+									</button>
+								</form>
+							</td>
+						</tr>
 					';
 				}
-				
-				echo "
-						</tbody>
-            			</table>
-						</div>
-				";
+
+				echo '
+					</tbody>
+					</table>
+					</div>
+				';
 			}
 			else
 			{
-				echo "<h3 style=\"margin:20px;\">Sem despesas cadastradas</h3>";
+				echo '<div class="px-5 py-10 text-center text-sm text-slate-500">Sem despesas cadastradas para este mês</div>';
 			}
-			
+
 		}
 	}
 

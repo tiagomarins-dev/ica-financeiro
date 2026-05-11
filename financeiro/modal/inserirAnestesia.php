@@ -1,166 +1,133 @@
- <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
+<!-- Modal: Inserir Servico (Anestesia) -->
+<div id="modalInserirAnestesia" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-anestesia-titulo" role="dialog" aria-modal="true">
+	<div class="flex min-h-full items-end sm:items-center justify-center p-4">
+		<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" data-modal-close="modalInserirAnestesia"></div>
 
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="myLargeModalLabel">Inserir Serviço</h4>
-        </div>
-        <div class="modal-body">
-          
-        <form class="form-horizontal" role="form" action="index.php" method="post">
-        
-            <div class="form-group">
-            	<label for="txtData" class="col-sm-2 control-label">Data: </label>
-            	<div class="col-sm-3 padInput">
-            	<input type="date" data-provide="datepicker" class="form-control" id="txtData" name="txtData" placeholder="">
-            	</div>
-            </div>
-            
-            <div class="form-group">
-        	<label for="txtCliente" class="col-sm-2 control-label">Cliente (Cirurgião): </label>
-        	<div class="col-sm-8 padInput">
-        		<input type="text" class="form-control" id="txtCliente" name="txtCliente" placeholder="">
-        	</div>
+		<div class="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl ring-1 ring-slate-200">
+			<!-- Header -->
+			<div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+				<h2 id="modal-anestesia-titulo" class="text-lg font-semibold text-slate-900">Inserir Serviço</h2>
+				<button type="button" data-modal-close="modalInserirAnestesia" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+				</button>
 			</div>
-        
-            <div class="form-group form-inline">
-            	<label for="txtAtendimento" class="col-sm-2 control-label">Atendimento: </label>
-            	<div class="col-sm-10 padInput">
-            	<select class="form-control bootstrap-select" id="txtAtendimento" name="txtAtendimento" placeholder="">
-                	<option value="">Selecione...</option>
-            		<option value="01">Edu e Pietro</option>
-            		<option value="02">Jaime</option>
-            		<option value="03">Antônio</option>
-            		<option value="04">Sérgio</option>
-            		<option value="05">Edu e Jaime</option>
-            		<option value="06">Eduardo</option>
-            	</select>
-				<select class="form-control bootstrap-select" id="txtAtendimento" name="txtAtendimento" placeholder="">
-                	<option value="">Selecione...</option>
-            		<option value="01">Edu e Pietro</option>
-            		<option value="02">Jaime</option>
-            		<option value="03">Antônio</option>
-            		<option value="04">Sérgio</option>
-            		<option value="05">Edu e Jaime</option>
-            		<option value="06">Eduardo</option>
-            	</select>
-            	</div>
-            </div>         
-        
-        
-        <div class="form-group">
-        	<label for="txtPaciente" class="col-sm-2 control-label">Paciente: </label>
-        	<div class="col-sm-8 padInput">
-        		<input type="text" class="form-control" id="txtPaciente" name="txtPaciente" placeholder="">
-        	</div>
-        </div> 
-        
-        <div class="form-group">
-        	<label for="txtCirurgia" class="col-sm-2 control-label">Cirurgia: </label>
-        	<div class="col-sm-8 padInput">
-        		<input type="text" class="form-control" id="txtCirurgia" name="txtCirurgia" placeholder="">
-        	</div>
-        </div> 
-        
-        <div class="form-group form-inline">
-        	<label for="txtValorBruto" class="col-sm-2 control-label">Valor Bruto: </label>
-        	<div class="input-group">
-        		<!--<input type="text" class="form-control" id="txtValorBruto" name="txtValorBruto" placeholder="Valor Bruto">-->
-                <span class="input-group-addon">R$</span>
- 				<input type="text" class="form-control money" id="txtValorBruto" name="txtValorBruto" placeholder="000,00">
-        	</div>           
-        </div> 
-        
-        <div class="input-group">
-  
-</div>
-       <!--  
-        <div class="form-group form-inline">
-        	<label for="txtValorReal" class="col-sm-2 control-label">Valor Real: </label>
-        	<div class="input-group">
-        		<span class="input-group-addon">R$</span>
-                <input type="text" class="form-control" id="txtValorReal" name="txtValorReal" placeholder="000,00">
-        	</div>
-         </div>
-        -->
-         <div class="form-group form-inline">
-        	<label for="txtDesconto" class="col-sm-2 control-label">Desconto: </label>
-        	<div class="input-group">
-        		<!-- <input type="text" class="form-control" id="txtDesconto" name="txtDesconto" placeholder="Desconto"> -->
-                <span class="input-group-addon">R$</span>
-                <input type="text" class="form-control money" id="txtDesconto" name="txtDesconto" placeholder="000,00">
-        	</div>
-         </div>
-         
-         <div class="form-group form-inline">
-        	<label for="chkRecebido" class="col-sm-2 control-label">Recebido: </label>
-        	<div class="input-group col-sm-6">
-        		<div class="checkbox">              
-                	<input type="checkbox" name="chkRecebido" id="chkRecebido">
-                </div>
-        	</div>
-         </div>
-         
-		 <!--
-         <div class="form-group form-inline">
-        	<label for="chkDepositado" class="col-sm-2 control-label">Depositado: </label>
-        	<div class="input-group col-sm-6">
-        		<div class="checkbox">              
-                	<input type="checkbox" name="chkDepositado" id="chkDepositado">
-                </div>
-        	</div>
-         </div>
-         -->
-		 
-         <div class="form-group form-inline">
-        	<label for="txtNota" class="col-sm-2 control-label">Nota: </label>
-        	<div class="input-group col-sm-3">
-        		<!-- <input type="text" class="form-control" id="txtNota" name="txtNota" placeholder="Nota"> -->
-        		<div class="checkbox">              
-                	<label for="chkNota"></label><input type="radio" name="chkNota" id="chkNota" value="S" checked /> Sim </label>
-                	<label for="chkNota"></label><input type="radio" name="chkNota" id="chkNota" value="N" /> Não </label>
-                </div>
-        	</div>
-         </div>
-         
-         <div class="form-group form-inline">
-            	<label for="txtPagamento" class="col-sm-2 control-label">Pagamento: </label>
-            	<div class="col-sm-4 padInput">
-            	<select class="form-control bootstrap-select" id="txtPagamento" name="txtPagamento" placeholder="">
-            		<option value="">Selecione...</option>
-            		<?php $cadastro->ListaFormaPagamentoForm(); ?>
-            	</select>
-            	</div>
-            </div>
-            
-        <div class="form-group">
-        	<label for="txtObs" class="col-sm-2 control-label">Observações:&nbsp;&nbsp;</label>
-        	<div class="col-sm-8 padInput">
-        		<input type="text" class="form-control" id="txtObs" name="txtObs" placeholder="">
-        	</div>           
-        </div>
-		
-		<div class="form-group">
-			<label for="txtDataPrevisao" class="col-sm-2 control-label">Previsão Depósito: </label>
-			<div class="col-sm-3 padInput">
-			<input type="date" data-provide="datepicker" class="form-control" id="txtDataPrevisao" name="txtDataPrevisao" placeholder="">
-			</div>
+
+			<!-- Body -->
+			<form action="index.php" method="post" onsubmit="return validaFormServico();">
+				<div class="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
+
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div>
+							<label for="txtData" class="block text-sm font-medium text-slate-700 mb-1.5">Data <span class="text-red-500">*</span></label>
+							<input type="<?php echo $typeData; ?>" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtData" name="txtData" />
+						</div>
+						<div>
+							<label for="txtDataPrevisao" class="block text-sm font-medium text-slate-700 mb-1.5">Previsão de Depósito</label>
+							<input type="<?php echo $typeData; ?>" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtDataPrevisao" name="txtDataPrevisao" />
+						</div>
+					</div>
+
+					<div>
+						<label for="txtCliente" class="block text-sm font-medium text-slate-700 mb-1.5">Cliente (Cirurgião) <span class="text-red-500">*</span></label>
+						<input type="text" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtCliente" name="txtCliente" />
+					</div>
+
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div>
+							<label for="txtAtendimento1" class="block text-sm font-medium text-slate-700 mb-1.5">Anestesista 1</label>
+							<select class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-white" id="txtAtendimento1" name="txtAtendimento1">
+								<option value="">Selecione...</option>
+								<option value="01">Edu e Pietro</option>
+								<option value="02">Jaime</option>
+								<option value="03">Antônio</option>
+								<option value="04">Sérgio</option>
+								<option value="05">Edu e Jaime</option>
+								<option value="06">Eduardo</option>
+							</select>
+						</div>
+						<div>
+							<label for="txtAtendimento2" class="block text-sm font-medium text-slate-700 mb-1.5">Anestesista 2</label>
+							<select class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-white" id="txtAtendimento2" name="txtAtendimento2">
+								<option value="">Selecione...</option>
+								<option value="01">Edu e Pietro</option>
+								<option value="02">Jaime</option>
+								<option value="03">Antônio</option>
+								<option value="04">Sérgio</option>
+								<option value="05">Edu e Jaime</option>
+								<option value="06">Eduardo</option>
+							</select>
+						</div>
+					</div>
+
+					<div>
+						<label for="txtPaciente" class="block text-sm font-medium text-slate-700 mb-1.5">Paciente <span class="text-red-500">*</span></label>
+						<input type="text" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtPaciente" name="txtPaciente" />
+					</div>
+
+					<div>
+						<label for="txtCirurgia" class="block text-sm font-medium text-slate-700 mb-1.5">Cirurgia <span class="text-red-500">*</span></label>
+						<input type="text" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtCirurgia" name="txtCirurgia" />
+					</div>
+
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div>
+							<label for="txtValorBruto" class="block text-sm font-medium text-slate-700 mb-1.5">Valor Bruto <span class="text-red-500">*</span></label>
+							<div class="relative">
+								<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-sm text-slate-500">R$</span>
+								<input type="text" class="money block w-full pl-10 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtValorBruto" name="txtValorBruto" placeholder="0,00" />
+							</div>
+						</div>
+						<div>
+							<label for="txtDesconto" class="block text-sm font-medium text-slate-700 mb-1.5">Desconto</label>
+							<div class="relative">
+								<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-sm text-slate-500">R$</span>
+								<input type="text" class="money block w-full pl-10 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtDesconto" name="txtDesconto" placeholder="0,00" />
+							</div>
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+						<div>
+							<label for="txtPagamento" class="block text-sm font-medium text-slate-700 mb-1.5">Pagamento <span class="text-red-500">*</span></label>
+							<select class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-white" id="txtPagamento" name="txtPagamento">
+								<option value="">Selecione...</option>
+								<?php $cadastro->ListaFormaPagamentoForm(); ?>
+							</select>
+						</div>
+						<div>
+							<span class="block text-sm font-medium text-slate-700 mb-1.5">Nota</span>
+							<div class="flex items-center gap-4 py-2">
+								<label class="inline-flex items-center gap-1.5 text-sm cursor-pointer">
+									<input type="radio" name="chkNota" value="S" checked class="w-4 h-4 text-brand-600" />
+									Sim
+								</label>
+								<label class="inline-flex items-center gap-1.5 text-sm cursor-pointer">
+									<input type="radio" name="chkNota" value="N" class="w-4 h-4 text-brand-600" />
+									Não
+								</label>
+							</div>
+						</div>
+						<div>
+							<label class="inline-flex items-center gap-2 text-sm cursor-pointer py-2">
+								<input type="checkbox" name="chkRecebido" id="chkRecebido" class="w-4 h-4 text-brand-600 rounded" />
+								Recebido
+							</label>
+						</div>
+					</div>
+
+					<div>
+						<label for="txtObs" class="block text-sm font-medium text-slate-700 mb-1.5">Observações</label>
+						<input type="text" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtObs" name="txtObs" />
+					</div>
+
+				</div>
+
+				<!-- Footer -->
+				<div class="flex items-center justify-end gap-2 px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl">
+					<button type="button" data-modal-close="modalInserirAnestesia" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">Cancelar</button>
+					<button type="submit" name="btnInserirAnestesia" class="px-4 py-2 text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 rounded-lg cursor-pointer transition-colors">Inserir Serviço</button>
+				</div>
+			</form>
 		</div>
-        
-        
-        
-        <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-        <input type="submit" class="btn btn-primary" value="Inserir" name="btnInserirAnestesia" />
-      </div>
-      
-        </form>
-          
-          
-          
-          
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+	</div>
+</div>

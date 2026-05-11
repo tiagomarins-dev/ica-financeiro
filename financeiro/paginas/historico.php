@@ -2,36 +2,21 @@
 	$pagAtual = (isset($_GET['p'])) ? $_GET['p'] : 1;
 ?>
 
-<!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <?php $relatorio->RetornaSomaEquipeChart('10','2014'); ?>
-	<?php $relatorio->RetornaSomaClientesChart('10','2014'); ?>
-	
+<div class="space-y-6">
 
-<div class="main">
+	<header>
+		<h1 class="text-xl font-semibold text-slate-900">Histórico Completo</h1>
+		<p class="mt-1 text-sm text-slate-500">Faturamento mensal histórico</p>
+	</header>
 
-	<h1 class="page-header">Relatório Completo</h1>
-          <div class="table-responsive">
-            <?php $relatorio->RetornaValoresCompletos($pagAtual); ?>
-            <ul class="pager">  
-  				<!-- <li class="next"><a href="#">Ver mais &rarr;</a></li> -->
-			</ul>
-          </div>
+	<section class="bg-white rounded-xl ring-1 ring-slate-200 overflow-hidden">
+		<?php $relatorio->RetornaValoresCompletos($pagAtual); ?>
+	</section>
 
-	<nav style="text-align: center">
-	<ul class="pagination pagination-lg">
-	
-	<?php
-
-		
-
-		$relatorio->PaginacaoValores($pagAtual);  
-
-	?>
-	
-	</ul>
+	<nav class="flex justify-center">
+		<ul class="inline-flex items-center gap-1">
+			<?php $relatorio->PaginacaoValores($pagAtual); ?>
+		</ul>
 	</nav>
 
-
-  
 </div>

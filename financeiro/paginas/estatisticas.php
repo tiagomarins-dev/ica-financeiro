@@ -1,66 +1,49 @@
 <?php
 	$mes = (isset($_GET['m'])) ? $_GET['m'] : date('m');
-	$ano = (isset($_GET['a'])) ? $_GET['a'] : date('Y');	
-
-	if(($mes >= 1) && ($mes <= 12))
-	{
-		$mes = $mes;
-	}
-	else
-	{
-		$mes = date('m');
-	}
-
-	if(($ano > 1980) && ($mes < 2114))
-	{
-		$ano = $ano;
-	}
-	else
-	{
-		$ano = date('Y');
-	}
-
+	$ano = (isset($_GET['a'])) ? $_GET['a'] : date('Y');
+	if (!(($mes >= 1) && ($mes <= 12))) $mes = date('m');
+	if (!(($ano > 1980) && ($mes < 2114))) $ano = date('Y');
+	include __DIR__ . '/_relatTabs.php';
 ?>
 
-<!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <?php $relatorio->RetornaSomaEquipeChart($mes,$ano); ?>
-	<?php $relatorio->RetornaSomaClientesChart('10','2014'); ?>	
+<!-- Google Charts API -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<?php $relatorio->RetornaSomaEquipeChart($mes, $ano); ?>
+<?php $relatorio->RetornaSomaClientesChart('10','2014'); ?>
 
-<div class="main">
-<div style="width:100%; text-align:right; border:0px solid #000;">
-<ul class="nav nav-pills" style="float:right; margin:auto;  text-align:right;">
-<li role="presentation"><a href="?s=relatorios"><span class="glyphicon glyphicon-search"></span>&nbsp;Busca</a></li>
+<div class="space-y-6">
 
-<li role="presentation"><a href="?s=relatCirurgia"><span class="glyphicon glyphicon-th-list"></span>&nbsp;Cirurgias</a></li>
-<li role="presentation"><a href="?s=relatClientes"><span class="glyphicon glyphicon-briefcase"></span>&nbsp;Clientes</a></li>
-<li role="presentation"><a href="?s=relatPagamento"><span class="glyphicon glyphicon-usd"></span>&nbsp;Formas de Pagamento</a></li>
-<li role="presentation"><a href="?s=relatImpostos"><span class="glyphicon glyphicon-tag"></span>&nbsp;Impostos</a></li>
-<li role="presentation"><a href="?s=naoCompensado">Não Compensados</a></li>
-<li role="presentation"><a href="?s=naoRecebido">Não Recebidos</a></li>
-</ul>
-</div>
-<h1 class="page-header">Anestesistas</h1>
-   
-<!-- <h2>Em desenvolvimento... </h2> -->
+	<header>
+		<h1 class="text-xl font-semibold text-slate-900">Anestesistas</h1>
+		<p class="mt-1 text-sm text-slate-500">Resumo mensal por equipe</p>
+	</header>
 
-<div class="dropdown" style="margin-bottom:20px;">
-        	
-			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-        		<?php echo $cadastro->RenomeiaMeses($mes,$ano); ?>
-        		<span class="caret"></span>
-       		</button>
-        	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				<?php $cadastro->ListaMesesStats($mes,$ano); ?>
-				<!--
-        		<li role="presentation" class="divider"></li>
-        		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">2013</a></li>
-        		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">2012</a></li>
-				-->
-        	</ul>
+	<?php renderRelatTabs('estatisticas'); ?>
+
+	<div class="relative inline-block" id="dropdownMesStats">
+		<button type="button" id="dropdownMesStatsBtn" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-900 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors">
+			<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25"/></svg>
+			<?php echo $cadastro->RenomeiaMeses($mes, $ano); ?>
+			<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
+		</button>
+		<ul id="dropdownMesStatsList" class="hidden absolute z-20 mt-1 w-56 max-h-72 overflow-y-auto bg-white rounded-lg shadow-lg ring-1 ring-slate-200 py-1 text-sm">
+			<?php $cadastro->ListaMesesStats($mes, $ano); ?>
+		</ul>
+	</div>
+
+	<section class="bg-white rounded-xl ring-1 ring-slate-200 overflow-hidden">
+		<?php $relatorio->RelatorioPorAnestesista($mes, $ano); ?>
+	</section>
+
+	<div id="chart_div" class="bg-white rounded-xl ring-1 ring-slate-200 p-6" style="height: 500px;"></div>
+
 </div>
 
-<?php $relatorio->RelatorioPorAnestesista($mes,$ano); ?>
-<div id="chart_div" style="width: 900px; height: 500px; margin:20px;"></div>
-  
-</div>
+<script>
+	(function() {
+		const btn = document.getElementById('dropdownMesStatsBtn');
+		const list = document.getElementById('dropdownMesStatsList');
+		btn?.addEventListener('click', e => { e.stopPropagation(); list.classList.toggle('hidden'); });
+		document.addEventListener('click', e => { if (!btn?.parentElement.contains(e.target)) list?.classList.add('hidden'); });
+	})();
+</script>

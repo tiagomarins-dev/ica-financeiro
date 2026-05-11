@@ -1,69 +1,53 @@
 <?php
-	
 	$idUser = (isset($_SESSION['idUser'])) ? $_SESSION['idUser'] : '';
-	
-	//Buscar dados no banco do usuário pelo ID $_SESSION['idUser']
-	$dados = $login->BuscarDadosUsuario($idUser);	
-	
+	$dados = $login->BuscarDadosUsuario($idUser);
 	$senha_usuario = '';
 	$disabled = '';
-	
-	if(isset($_POST['btnNovaSenha']))
-	{
-		
-	}
 ?>
 
+<div class="space-y-6">
 
+	<header>
+		<h1 class="text-xl font-semibold text-slate-900">Minha Conta</h1>
+		<p class="mt-1 text-sm text-slate-500">Atualize sua senha</p>
+	</header>
 
-<div class="main">
-	
-	<h1 class="page-header">Minha Conta</h1>
+	<form action="?s=minhaConta" method="post" class="bg-white rounded-xl ring-1 ring-slate-200 p-6 space-y-4 max-w-2xl">
 
-	<form class="form-horizontal" role="form" action="?s=minhaConta" method="post">
-        
-        <input type="hidden" name="txtidUsuario" value="<?php echo $dados['id']; ?>" />
-        
-        <div class="form-group">
-          	<label for="txtNomeUsuario" class="col-sm-2 control-label">Nome: </label>
-           	<div class="col-sm-2 padInput">
-				<input type="text" class="form-control" id="txtNomeUsuario" name="txtNomeUsuario" value="<?php echo $dados['nome_usuario'] ?>" disabled />
-          	</div>
-        </div>
-		
-		<div class="form-group">
-          	<label for="txtSobreNomeUsuario" class="col-sm-2 control-label">Sobrenome: </label>
-           	<div class="col-sm-3 padInput">
-				<input type="text" class="form-control" id="txtSobreNomeUsuario" name="txtSobreNomeUsuario" value="<?php echo $dados['sobrenome_usuario'] ?>" disabled />
-          	</div>
-        </div>
-		
-		<div class="form-group">
-          	<label for="txtLoginUsuario" class="col-sm-2 control-label">Login: </label>
-           	<div class="col-sm-2 padInput">
-				<input type="text" class="form-control" id="txtLoginUsuario" name="txtLoginUsuario" value="<?php echo $dados['login_usuario'] ?>" maxlength="16" disabled />
-          	</div>
-        </div>
-		
-		<div class="form-group">
-          	<label for="txtSenhaUsuario" class="col-sm-2 control-label">Nova Senha: </label>
-           	<div class="col-sm-2 padInput">
-				<input type="password" class="form-control" id="txtSenhaUsuario" name="txtSenhaUsuario" value="<?php echo $senha_usuario; ?>" <?php echo $disabled; ?> maxlength="8" />
-          	</div>
-        </div>
-		
-		<div class="form-group">
-          	<label for="txtSenhaUsuario2" class="col-sm-2 control-label">Confirmar Senha: </label>
-           	<div class="col-sm-2 padInput">
-				<input type="password" class="form-control" id="txtSenhaUsuario2" name="txtSenhaUsuario2" value="<?php echo $senha_usuario; ?>" <?php echo $disabled; ?> maxlength="8" />
-          	</div>
-        </div>    
-        
-		<div class="col-sm-10 padInput" style="text-align:right;">
-			<input type="submit" class="btn btn-primary" value="Enviar" name="btnNovaSenha" />
+		<input type="hidden" name="txtidUsuario" value="<?php echo $dados['id']; ?>" />
+
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+			<div>
+				<label for="txtNomeUsuario" class="block text-sm font-medium text-slate-700 mb-1.5">Nome</label>
+				<input type="text" class="block w-full px-3 py-2 text-sm bg-slate-50 text-slate-600 border border-slate-300 rounded-lg" id="txtNomeUsuario" name="txtNomeUsuario" value="<?php echo $dados['nome_usuario'] ?>" disabled />
+			</div>
+			<div>
+				<label for="txtSobreNomeUsuario" class="block text-sm font-medium text-slate-700 mb-1.5">Sobrenome</label>
+				<input type="text" class="block w-full px-3 py-2 text-sm bg-slate-50 text-slate-600 border border-slate-300 rounded-lg" id="txtSobreNomeUsuario" name="txtSobreNomeUsuario" value="<?php echo $dados['sobrenome_usuario'] ?>" disabled />
+			</div>
 		</div>
-    </form>
-    
-    
-	
+
+		<div>
+			<label for="txtLoginUsuario" class="block text-sm font-medium text-slate-700 mb-1.5">Login</label>
+			<input type="text" class="block w-full px-3 py-2 text-sm bg-slate-50 text-slate-600 border border-slate-300 rounded-lg" id="txtLoginUsuario" name="txtLoginUsuario" value="<?php echo $dados['login_usuario'] ?>" maxlength="16" disabled />
+		</div>
+
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+			<div>
+				<label for="txtSenhaUsuario" class="block text-sm font-medium text-slate-700 mb-1.5">Nova Senha</label>
+				<input type="password" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtSenhaUsuario" name="txtSenhaUsuario" maxlength="8" />
+			</div>
+			<div>
+				<label for="txtSenhaUsuario2" class="block text-sm font-medium text-slate-700 mb-1.5">Confirmar Senha</label>
+				<input type="password" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtSenhaUsuario2" name="txtSenhaUsuario2" maxlength="8" />
+			</div>
+		</div>
+
+		<div class="flex justify-end pt-2 border-t border-slate-100">
+			<button type="submit" name="btnNovaSenha" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 rounded-lg cursor-pointer transition-colors">
+				Atualizar senha
+			</button>
+		</div>
+	</form>
+
 </div>

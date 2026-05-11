@@ -1,98 +1,75 @@
-<div class="main">
-
-<div style="width:100%; text-align:right; border:0px solid #000;">
-<ul class="nav nav-pills" style="float:right; margin:auto;  text-align:right;">
-<li role="presentation"><a href="?s=usuarios"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Usuários</a></li>
-<li role="presentation"><a href="?s=descontos"><span class="glyphicon glyphicon-barcode"></span>&nbsp;&nbsp;Pagamentos</a></li>
-<li role="presentation"><a href="?s=clientes"><span class="glyphicon glyphicon-briefcase"></span>&nbsp;&nbsp;Clientes</a></li>
-</ul>
-</div>
-
 <?php
-	if(isset($_POST['btnInserirDespesa']))
-	{
-		$cadastro->CadastrarDespesaFixa();
-	}
-	elseif(isset($_POST['btnDelDespesa']))
-	{
-		$cadastro->ApagarDespesaFixa();
-	}
-	elseif(isset($_POST['btnEditarDespesa']))
-	{
-		$cadastro->EditarDespesaFixa();
-	}
-	
-	if((isset($_GET['e'])) && (isset($_GET['id'])))
-	{
+	include __DIR__ . '/_configTabs.php';
+
+	if(isset($_POST['btnInserirDespesa']))   $cadastro->CadastrarDespesaFixa();
+	elseif(isset($_POST['btnDelDespesa']))   $cadastro->ApagarDespesaFixa();
+	elseif(isset($_POST['btnEditarDespesa'])) $cadastro->EditarDespesaFixa();
+
+	if((isset($_GET['e'])) && (isset($_GET['id']))) {
 		$dados = $cadastro->RetornaDadosDespesa($_GET['id']);
-		
 		$nomeBotao = 'btnEditarDespesa';
-		$labelBotao = 'Editar';
+		$labelBotao = 'Salvar alterações';
 		$edicao = 'S';
-	}
-	else
-	{
-		$dados['id'] = '';
-		$dados['despesa'] = '';
-		$dados['descricao'] = '';
-		$dados['valor_despesa'] = '';
-		$dados['dia_vencimento'] = '';
-		
+	} else {
+		$dados = ['id'=>'', 'despesa'=>'', 'descricao'=>'', 'valor_despesa'=>'', 'dia_vencimento'=>''];
 		$nomeBotao = 'btnInserirDespesa';
 		$labelBotao = 'Inserir';
 		$edicao = 'N';
-		
 	}
 ?>
-	<h2 style="margin-bottom:50px;">Despesas Fixas</h2>
 
-	<form class="form-horizontal" role="form" action="?s=despesas" method="post">
-        
-		<input type="hidden" name="chkDespesa" value="<?php echo $dados['id']; ?>" />
-		
-		<div class="form-group">
-          	<label for="txtDiaVencimento" class="col-sm-2 control-label">Dia de Vencimento: </label>
-           	<div class="col-sm-1 padInput">
-				<input type="text" class="form-control" id="txtDiaVencimento" name="txtDiaVencimento" maxlength="2" value="<?php echo $dados['dia_vencimento']; ?>">
-          	</div>
-        </div>
-            
-        <div class="form-group">
-        	<label for="txtDespesa" class="col-sm-2 control-label">Despesa: </label>
-        	<div class="col-sm-8 padInput">
-        		<input type="text" class="form-control" id="txtDespesa" name="txtDespesa" placeholder="" value="<?php echo $dados['despesa']; ?>">
-        	</div>
-        </div> 
-                       
-        <div class="form-group">
-        	<label for="txtDescricao" class="col-sm-2 control-label">Descrição: </label>
-        	<div class="col-sm-8 padInput">
-        		<input type="text" class="form-control" id="txtDescricao" name="txtDescricao" placeholder="" value="<?php echo $dados['descricao']; ?>">
-        	</div>
-        </div> 
-        
-        <div class="form-group form-inline">
-        	<label for="txtValorDespesa" class="col-sm-2 control-label">Valor: </label>
-        	<div class="input-group">
-        		<!--<input type="text" class="form-control" id="txtValorBruto" name="txtValorBruto" placeholder="Valor Bruto">-->
-                <span class="input-group-addon">R$</span>
- 				<input type="text" class="form-control money" id="txtValorDespesa" name="txtValorDespesa" placeholder="000,00" value="<?php echo $dados['valor_despesa']; ?>">
-        	</div>           
-        </div> 
-        
-		<div class="col-sm-10 padInput" style="text-align:right;">
-			<input type="submit" class="btn btn-primary" value="<?php echo $labelBotao; ?>" name="<?php echo $nomeBotao; ?>" />
+<div class="space-y-6">
+
+	<header class="flex items-center justify-between">
+		<div>
+			<h1 class="text-xl font-semibold text-slate-900">Despesas Fixas</h1>
+			<p class="mt-1 text-sm text-slate-500"><?php echo $edicao=='S' ? 'Editar despesa fixa' : 'Cadastrar despesa fixa'; ?></p>
 		</div>
-    </form>
-	
-	<br /><br /><br /><br />
-	
-	<?php
-		if($edicao == 'S')
-		{
-			echo '<a href="?s=despesas"><button class="btn btn-info btn-lg"><span class="glyphicon glyphicon-plus"></span>&nbsp; Inserir</button></a>';
-		}
-		$cadastro->ListaDespesasFixas();
-	?>
-  
+		<?php if ($edicao == 'S'): ?>
+		<a href="?s=despesas" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 ring-1 ring-brand-200 rounded-lg cursor-pointer transition-colors">
+			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+			Inserir nova
+		</a>
+		<?php endif; ?>
+	</header>
+
+	<?php renderConfigTabs('despesas'); ?>
+
+	<form action="?s=despesas" method="post" class="bg-white rounded-xl ring-1 ring-slate-200 p-6 space-y-4">
+
+		<input type="hidden" name="chkDespesa" value="<?php echo $dados['id']; ?>" />
+
+		<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+			<div>
+				<label for="txtDiaVencimento" class="block text-sm font-medium text-slate-700 mb-1.5">Dia de Vencimento</label>
+				<input type="text" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtDiaVencimento" name="txtDiaVencimento" maxlength="2" value="<?php echo $dados['dia_vencimento']; ?>" />
+			</div>
+			<div class="sm:col-span-2">
+				<label for="txtValorDespesa" class="block text-sm font-medium text-slate-700 mb-1.5">Valor</label>
+				<div class="relative">
+					<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-sm text-slate-500">R$</span>
+					<input type="text" class="money block w-full pl-10 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtValorDespesa" name="txtValorDespesa" placeholder="0,00" value="<?php echo $dados['valor_despesa']; ?>" />
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<label for="txtDespesa" class="block text-sm font-medium text-slate-700 mb-1.5">Despesa</label>
+			<input type="text" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtDespesa" name="txtDespesa" value="<?php echo $dados['despesa']; ?>" />
+		</div>
+
+		<div>
+			<label for="txtDescricao" class="block text-sm font-medium text-slate-700 mb-1.5">Descrição</label>
+			<input type="text" class="block w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" id="txtDescricao" name="txtDescricao" value="<?php echo $dados['descricao']; ?>" />
+		</div>
+
+		<div class="flex justify-end pt-2 border-t border-slate-100">
+			<button type="submit" name="<?php echo $nomeBotao; ?>" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 rounded-lg cursor-pointer transition-colors"><?php echo $labelBotao; ?></button>
+		</div>
+	</form>
+
+	<section class="bg-white rounded-xl ring-1 ring-slate-200 overflow-hidden">
+		<?php $cadastro->ListaDespesasFixas(); ?>
+	</section>
+
 </div>

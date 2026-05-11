@@ -9,7 +9,6 @@
 <!-- Google Charts API -->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <?php $relatorio->RetornaSomaEquipeChart($mes, $ano); ?>
-<?php $relatorio->RetornaSomaClientesChart('10','2014'); ?>
 
 <div class="space-y-6">
 

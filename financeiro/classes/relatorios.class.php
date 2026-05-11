@@ -176,27 +176,22 @@ class Relatorios
 			if($RecordCount > 0)
 			{
 				echo '
-						<table class="table table-striped table-bordered table-hover">
-						<thead>
-						<tr>
-						<th>Mês/Ano</th>	
-						
-						<th>Notas Emitidas</th>
-						<!-- <th>Notas Emitidas Com Impostos</th> -->
-						<th>Gratuidade</th>
-						<th>Faturamento bruto</th>
-						<!-- <th>Total Descontos Promocionais</th> -->
-						<th>Total Desconto Cartão</th>						
-						
-						
-						<th>Despesas</th>
-						<!-- <th>Saldo</th> -->
-						<th>Líquido</th>
-						</tr>
-						</thead>
-						<tbody>			
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Mês/Ano</th>
+									<th class="px-4 py-3 text-right">Notas Emitidas</th>
+									<th class="px-4 py-3 text-right">Gratuidade</th>
+									<th class="px-4 py-3 text-right">Faturamento</th>
+									<th class="px-4 py-3 text-right">Desc. Cartão</th>
+									<th class="px-4 py-3 text-right">Despesas</th>
+									<th class="px-4 py-3 text-right">Líquido</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				while($rows = $result->fetch_assoc())
 				{
 					$cadastro = new cadastro();
@@ -207,39 +202,31 @@ class Relatorios
 					$this->totalComNota = $cadastro->converteValorSite($rows['SomaValorNota']);
 					$this->totalSemNota = $cadastro->converteValorSite($rows['SomaValorSemNota']);
 					$this->totalLiquido = $cadastro->converteValorSite($rows['SomaValorFinal']);
-					//$this->totalLiquidoImposto = $cadastro->converteValorSite($rows['SomaValorFinalImposto']);
 					$this->totalDespesas = $cadastro->converteValorSite($rows['SomaDespesasMes']);
 					$this->totalSaldo = $this->CalculaSaldo($rows['SomaValorBruto'],$rows['SomaDescontoCartao'],$rows['SomaDespesasMes']);
-					//$this->totalSaldo = $this->CalculaSaldo2($rows['SomaValorFinalImposto'],$rows['SomaValorSemNota'],$rows['SomaDescontoCartao'],$rows['SomaValorDescontos'],$rows['SomaDespesasMes']);
 					$this->totalSaldo = $cadastro->converteValorSiteSaldo($this->totalSaldo);
-					
-					echo '
-							<tr>
-							<td>'.$this->mesAno.'</td>
-							<td>'.$this->totalComNota.'</td>
-							<!-- <td>'.$this->totalLiquidoImposto.'</td> -->
-							<td>'.$this->totalSemNota.'</td>
-							<td><strong>'.$this->totalBruto.'</strong></td>
-							<!-- <td>'.$this->totalDescontos.'</td> -->
-							<td>'.$this->totalDescntoCartao.'</td>
-							
-														
-							<td>'.$this->totalDespesas.'</td>
-							<!-- <td>'.$this->totalSaldo.'</td> -->
-							<td>'.$this->totalSaldo.'</td>
-							</tr>					
-					';			
-				}		
-			
+
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5 font-medium text-slate-900">'.$this->mesAno.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$this->totalComNota.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums text-slate-600">'.$this->totalSemNota.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-semibold text-slate-900">'.$this->totalBruto.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums text-slate-600">'.$this->totalDescntoCartao.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums text-slate-600">'.$this->totalDespesas.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-semibold text-brand-700">'.$this->totalSaldo.'</td>
+							</tr>';
+				}
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
+					</div>
 				';
 			}
 			else
 			{
-				echo 'Sem Registros';
-			}		
+				echo '<p class="px-4 py-6 text-sm text-slate-500">Sem registros.</p>';
+			}
 		}		
 	}
 	
@@ -893,19 +880,19 @@ class Relatorios
 			if($RecordCount > 0)
 			{
 				echo '
-						<h3>Por Anestesista</h3>
-						<table class="table table-striped table-bordered table-hover">
-						<thead>
-						<tr>
-						<th>Anestesista</th>	
-						<th>Porcentagem</th>
-						<th>Total Valor Líquido</th>
-						<th>Total Valor Final</th>
-						</tr>
-						</thead>
-						<tbody>			
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Anestesista</th>
+									<th class="px-4 py-3 text-right">Porcentagem</th>
+									<th class="px-4 py-3 text-right">Total Valor Líquido</th>
+									<th class="px-4 py-3 text-right">Total Valor Final</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				while($rows = $result->fetch_assoc())
 				{
 					$cadastro = new cadastro();
@@ -913,20 +900,19 @@ class Relatorios
 					$this->porcentagem = $rows['Porcentagem'] . '%';
 					$this->totalValorLiquido = $cadastro->converteValorSite($rows['total']);
 					$this->totalValorFinal = $cadastro->converteValorSite($rows['totalValorFinal']);
-					
-					echo '
-							<tr>
-							<td>'.$this->anestesista.'</td>
-							<td>'.$this->porcentagem.'</td>
-							<td>'.$this->totalValorLiquido.'</td>
-							<td>'.$this->totalValorFinal.'</td>
-							</tr>					
-					';
+
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5 font-medium">'.$this->anestesista.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums text-slate-600">'.$this->porcentagem.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$this->totalValorLiquido.'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-semibold text-brand-700">'.$this->totalValorFinal.'</td>
+							</tr>';
 				}
-				
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
+					</div>
 				';
 			}
 		}
@@ -951,73 +937,85 @@ class Relatorios
 			if($RecordCount > 0)
 			{
 				echo '
-						<h3>Por Cirurgião</h3>
-						<table class="table table-striped table-bordered table-hover">
-						<thead>
-						<tr>
-						<th>Cliente (Cirurgião)</th>	
-						<th>Quantidade</th>
-						<th>Valor total</th>
-						<th width="5%"></th>
-						</tr>
-						</thead>
-						<tbody>			
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Cliente (Cirurgião)</th>
+									<th class="px-4 py-3 text-right">Qtde</th>
+									<th class="px-4 py-3 text-right">Valor total</th>
+									<th class="px-4 py-3 text-right w-32"></th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				$grupoAnt = '';
 				$i = 1000;
-				
+				// Modais sao acumulados e renderizados depois da tabela (evita <div> dentro de <tbody>)
+				$modaisHtml = '';
+
 				while($rows = $result->fetch_assoc())
-				{					
-					
+				{
 					if($rows['periodoServico'] != $grupoAnt)
 					{
-						echo 	'<tr>
-									<th colspan="4" style="background:#f0f0f0;">'. $cadastro->RenomeiaMeses($rows['mes'],$rows['ano']) .'</th>
-								</tr>';
+						echo '<tr class="bg-slate-50">
+								<th colspan="4" class="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">'. $cadastro->RenomeiaMeses($rows['mes'],$rows['ano']) .'</th>
+							</tr>';
 					}
-					
-					echo 	'
-								<tr>
-									<td>'.$rows['nome_cliente'].'</td>
-									<td>'.$rows['quantidade'].'</td>
-									<td>R$ '.$rows['totalValor'].'</td>
-									<td><a class="btn btn-sm btn-default" data-toggle="modal" data-target=".bs-example-modal-lg'.$i.'"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Cirurgias</a></td>
-								</tr>
-					';
-					
-					//MODAL COM AS CIRURGIAS
-					echo '
-					
-					<div class="modal fade bs-example-modal-lg'.$i.'" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-					
-					<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" id="myLargeModalLabel">Cirurgias Por Cliente</h4>
-					</div>
-					<div class="modal-body">
-					
-					
-					<iframe src="cirurgiasPorCliente.php?c='.$rows['nome_cliente'].'&i='.$dataInicio.'&f='.$dataFim.'&t='.$rows['totalValor'].'" style="zoom:0.60" width="99.6%" height="500" frameborder="0"></iframe>	
-					
-					
-					
-					</div>
-					</div><!-- /.modal-content -->
-					</div><!-- /.modal-dialog -->
-					</div><!-- /.modal -->';
-									
-					
+
+					$modalId = 'modalCirurgiasCliente' . $i;
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5 font-medium">'.$rows['nome_cliente'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$rows['quantidade'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-medium">R$ '.$rows['totalValor'].'</td>
+								<td class="px-4 py-2.5 text-right">
+									<button type="button" onclick="document.getElementById(\''.$modalId.'\')?.classList.remove(\'hidden\')" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 ring-1 ring-brand-200 rounded-md cursor-pointer transition-colors">
+										<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+										Cirurgias
+									</button>
+								</td>
+							</tr>';
+
+					$modaisHtml .= '
+						<div id="'.$modalId.'" role="dialog" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+							<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" data-modal-close="'.$modalId.'"></div>
+							<div class="relative w-full max-w-3xl bg-white rounded-xl shadow-xl ring-1 ring-slate-200">
+								<div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+									<h3 class="text-base font-semibold text-slate-900">Cirurgias por Cliente — '.$rows['nome_cliente'].'</h3>
+									<button type="button" data-modal-close="'.$modalId.'" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+										<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+									</button>
+								</div>
+								<div class="p-2">
+									<iframe src="cirurgiasPorCliente.php?c='.urlencode($rows['nome_cliente']).'&i='.$dataInicio.'&f='.$dataFim.'&t='.$rows['totalValor'].'" class="w-full h-[500px] border-0 rounded-lg"></iframe>
+								</div>
+							</div>
+						</div>';
+
 					$i++;
 					$grupoAnt = $rows['periodoServico'];
 				}
-				
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
-				';				
+					</div>
+				';
+				echo $modaisHtml;
+				echo '<script>
+					(function(){
+						if (window.__cirurgiasModalBound) return;
+						window.__cirurgiasModalBound = true;
+						document.addEventListener("click", function(e){
+							var c = e.target.closest("[data-modal-close]");
+							if (c) document.getElementById(c.getAttribute("data-modal-close"))?.classList.add("hidden");
+						});
+						document.addEventListener("keydown", function(e){
+							if (e.key === "Escape") document.querySelectorAll("[role=\'dialog\']:not(.hidden)").forEach(function(m){ m.classList.add("hidden"); });
+						});
+					})();
+				</script>';
 			}		
 		}
 		
@@ -1045,29 +1043,34 @@ class Relatorios
 			$RecordCount = $result->num_rows;
 			
 			if($RecordCount > 0) {
-			
-				echo '<table class="table">
-						<tr>
-        					<th>Cirurgia</th>
-            				<th>Valor Total</th>
-        				</tr>
+				echo '
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Cirurgia</th>
+									<th class="px-4 py-3 text-right">Valor Total</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				while($rows = $result->fetch_assoc()) {
-				
-					echo '<tr>
-        					<td>'.$rows['cirurgia'].'</td>
-            				<td>R$ '.$rows['totalValor'].'</td>
-        					</tr>';
-				
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5">'.$rows['cirurgia'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-medium">R$ '.$rows['totalValor'].'</td>
+							</tr>';
 				}
-				
-				echo '<tr>
-				<td><strong>Total</strong></td>
-				<td><strong>R$ ' . $total .'</strong></td>
-				</tr>';
-				
-				echo '</table>';
+
+				echo '<tr class="bg-slate-50">
+							<td class="px-4 py-2.5 font-semibold text-slate-900">Total</td>
+							<td class="px-4 py-2.5 text-right tabular-nums font-semibold text-brand-700">R$ '.$total.'</td>
+						</tr>';
+
+				echo '	</tbody>
+						</table>
+					</div>
+				';
 			}
 			
 		}
@@ -1092,48 +1095,45 @@ class Relatorios
 			if($RecordCount > 0)
 			{
 				echo '
-						<h3>Por Cirurgia</h3>
-						<table class="table table-striped table-bordered table-hover" style="width:100%;">
-						<thead>
-						<tr>
-						<th>Cirurgia</th>	
-						<th align="center">Quantidade</th>
-						<th align="center">Valor total</th>
-						<th align="center">Valor médio</th>
-						</tr>
-						</thead>
-						<tbody>			
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Cirurgia</th>
+									<th class="px-4 py-3 text-right">Qtde</th>
+									<th class="px-4 py-3 text-right">Valor total</th>
+									<th class="px-4 py-3 text-right">Valor médio</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				$grupoAnt = '';
-				
+
 				while($rows = $result->fetch_assoc())
-				{					
-					
+				{
 					if($rows['periodoServico'] != $grupoAnt)
 					{
-						echo 	'<tr>
-									<th colspan="4" style="background:#f0f0f0;">'. $cadastro->RenomeiaMeses($rows['mes'],$rows['ano']) .'</th>
-								</tr>';
+						echo '<tr class="bg-slate-50">
+								<th colspan="4" class="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">'. $cadastro->RenomeiaMeses($rows['mes'],$rows['ano']) .'</th>
+							</tr>';
 					}
-					
-					echo 	'
-								<tr>
-									<td>'.$rows['cirurgia'].'</td>
-									<td align="center">'.$rows['quantidade'].'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['totalValor']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['valorMedio']).'</td>
-								</tr>
-					';					
-					
+
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5">'.$rows['cirurgia'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$rows['quantidade'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-medium">'.$cadastro->converteValorSite($rows['totalValor']).'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$cadastro->converteValorSite($rows['valorMedio']).'</td>
+							</tr>';
+
 					$grupoAnt = $rows['periodoServico'];
 				}
-				
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
-						<div id="chart_cirurgia" style="width: 40%;"></div>
-				';				
+					</div>
+				';
 			}		
 		}
 		
@@ -1157,48 +1157,45 @@ class Relatorios
 			if($RecordCount > 0)
 			{
 				echo '
-						<h3>Por Forma de Pagamento</h3>
-						<table class="table table-striped table-bordered table-hover">
-						<thead>
-						<tr>
-						<th>Forma de Pagamento</th>	
-						<th align="center">Quantidade</th>
-						<th align="center">Valor total</th>
-						<th align="center">Valor médio</th>
-						</tr>
-						</thead>
-						<tbody>			
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Forma de Pagamento</th>
+									<th class="px-4 py-3 text-right">Qtde</th>
+									<th class="px-4 py-3 text-right">Valor total</th>
+									<th class="px-4 py-3 text-right">Valor médio</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				$grupoAnt = '';
-				
+
 				while($rows = $result->fetch_assoc())
-				{					
-					
+				{
 					if($rows['periodoServico'] != $grupoAnt)
 					{
-						echo 	'<tr>
-									<th colspan="4" style="background:#f0f0f0;">'. $cadastro->RenomeiaMeses($rows['mes'],$rows['ano']) .'</th>
-								</tr>';
+						echo '<tr class="bg-slate-50">
+								<th colspan="4" class="px-4 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">'. $cadastro->RenomeiaMeses($rows['mes'],$rows['ano']) .'</th>
+							</tr>';
 					}
-					
-					echo 	'
-								<tr>
-									<td>'.$rows['tipo'].'</td>
-									<td align="center">'.$rows['quantidade'].'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['totalValor']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['valorMedio']).'</td>
-								</tr>
-					';					
-					
+
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5">'.$rows['tipo'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$rows['quantidade'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-medium">'.$cadastro->converteValorSite($rows['totalValor']).'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$cadastro->converteValorSite($rows['valorMedio']).'</td>
+							</tr>';
+
 					$grupoAnt = $rows['periodoServico'];
 				}
-				
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
-						<div id="chart_cirurgia" style="width: 40%;"></div>
-				';				
+					</div>
+				';
 			}		
 		}
 		
@@ -1223,55 +1220,52 @@ class Relatorios
 			if($RecordCount > 0)
 			{
 				echo '
-						<h3>Por Impostos</h3>
-						<table class="table table-striped table-bordered table-hover">
-						<thead>
-						<tr style="background:#d0d0d0; font-weight:bold;">
-						<td align="center">Mês/Ano</td>	
-						<td align="center">Total de Notas Emitidas</td>
-						<td align="center">Total PIS</td>
-						<td align="center">Total COFINS</td>
-						<td align="center">Total ISS</td>
-						<td align="center">Total IR</td>
-						<td align="center">Total CS</td>
-						<td align="center">Total de Descontos</td>
-						<td align="center">Total</td>
-						</tr>
-						</thead>
-						<tbody>			
-				';
-				
-				
-				while($rows = $result->fetch_assoc())
-				{					
-					
-					
-					echo 	'
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
 								<tr>
-									<td align="center">'.$cadastro->RenomeiaMeses($rows['mes'],$rows['ano']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['totalNotas']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['PIS']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['COFINS']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['ISS']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['IR']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['CS']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['totalDescontos']).'</td>
-									<td align="center">'.$cadastro->converteValorSite($rows['total']).'</td>
+									<th class="px-3 py-3 text-left">Mês/Ano</th>
+									<th class="px-3 py-3 text-right">Notas Emitidas</th>
+									<th class="px-3 py-3 text-right">PIS</th>
+									<th class="px-3 py-3 text-right">COFINS</th>
+									<th class="px-3 py-3 text-right">ISS</th>
+									<th class="px-3 py-3 text-right">IR</th>
+									<th class="px-3 py-3 text-right">CS</th>
+									<th class="px-3 py-3 text-right">Descontos</th>
+									<th class="px-3 py-3 text-right">Total</th>
 								</tr>
-					';					
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
+				';
+
+
+				while($rows = $result->fetch_assoc())
+				{
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-3 py-2.5 font-medium">'.$cadastro->RenomeiaMeses($rows['mes'],$rows['ano']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums">'.$cadastro->converteValorSite($rows['totalNotas']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums text-slate-600">'.$cadastro->converteValorSite($rows['PIS']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums text-slate-600">'.$cadastro->converteValorSite($rows['COFINS']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums text-slate-600">'.$cadastro->converteValorSite($rows['ISS']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums text-slate-600">'.$cadastro->converteValorSite($rows['IR']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums text-slate-600">'.$cadastro->converteValorSite($rows['CS']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums text-slate-600">'.$cadastro->converteValorSite($rows['totalDescontos']).'</td>
+								<td class="px-3 py-2.5 text-right tabular-nums font-semibold text-brand-700">'.$cadastro->converteValorSite($rows['total']).'</td>
+							</tr>';
 					
 			
 				}
 				
 				echo '
 						</tbody>
-						</table>
-				';				
-			}		
+					</table>
+				</div>
+				';
+			}
 		}
-		
+
 	}
-	
+
 	public function RetornaSomaDepositoPendente()
 	{
 		// Reusa o cache de carregarDepositoPendente() - evita 2a query quando ContaDepositoPendente ja foi chamada
@@ -1326,22 +1320,22 @@ class Relatorios
 			$pagAtual = 1;
 		}
 
+		$base = 'inline-flex items-center justify-center min-w-9 h-9 px-3 text-sm font-medium rounded-lg cursor-pointer transition-colors';
+		$inactive = ' text-slate-600 hover:text-slate-900 hover:bg-slate-100';
+		$active = ' bg-brand-600 text-white';
 
 		$i = 1;
 		$n = $regPag;
 
-		echo '<li><a href="index.php?s=historico&p='.$i.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+		echo '<li><a href="index.php?s=historico&p='.$i.'" aria-label="Primeira" class="'.$base.$inactive.'">&laquo;</a></li>';
 
 		while($i <= $n) {
-
-			$activePagAtual = ($pagAtual == $i) ? ' class="active" ' : ''; 
-
-			echo '<li'.$activePagAtual.'><a href="index.php?s=historico&p='.$i.'">'.$i.'</a></li>';
-
+			$cls = $base . (($pagAtual == $i) ? $active : $inactive);
+			echo '<li><a href="index.php?s=historico&p='.$i.'" class="'.$cls.'">'.$i.'</a></li>';
 			$i++;
 		}
 
-		echo '<li><a href="index.php?s=historico&p='.$n.'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+		echo '<li><a href="index.php?s=historico&p='.$n.'" aria-label="Última" class="'.$base.$inactive.'">&raquo;</a></li>';
 	}
 	
 	

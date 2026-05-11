@@ -1056,76 +1056,66 @@ class cadastro
             if($RecordCount > 0)
             {
                 echo '
-						<form name="frmCartoes" action="?s=checkCartao" method="post">
-						<div class="table-responsive">
-						<table class="table table-striped table-hover" style="font-size:12px;">
-						<thead>
-						<tr>
-						<th>Data</th>
-						<th>Recebido em</th>
-						<th>Cliente</th>
-						<th>Atendimento</th>
-						<th>Paciente</th>
-						
-						<th style="text-align:center">Valor Final</th>
-						
-						<th style="text-align:center">Forma de Pagamento</th>
-						<th width="2%" style="text-align:center">Conferido</th>
-						
-						
-						</tr>
-						</thead>
-						<tbody>				
+					<form name="frmCartoes" action="?s=checkCartao" method="post">
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-3 py-3 text-left">Data</th>
+									<th class="px-3 py-3 text-left">Recebido em</th>
+									<th class="px-3 py-3 text-left">Cliente</th>
+									<th class="px-3 py-3 text-left">Atendimento</th>
+									<th class="px-3 py-3 text-left">Paciente</th>
+									<th class="px-3 py-3 text-right">Valor Final</th>
+									<th class="px-3 py-3 text-left">Forma de Pagamento</th>
+									<th class="px-3 py-3 text-center w-20">Conferido</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-
-
 
                 while($rows = $result->fetch_assoc())
                 {
-
-                    $valorServico = $this->converteValorSite($rows['valor_bruto']);
                     $valorFinal = $this->converteValorSite($rows['valor_final']);
-                    $valorDesconto = $this->converteValorSite($rows['valor_desconto']);
-
-                    $recebido = ($rows['recebido'] == 'S') ? '<span class="glyphicon glyphicon-ok" style="color:#4cae4c; font-size:16px;"></span>' : '';
                     $depositado = ($rows['depositado'] == 'S') ? ' checked ' : '';
-
-                    $compensado = ($rows['compensado'] == 'N') ? '<span class="glyphicon glyphicon-remove" style="color:#c12e2a; font-size:12px;"></span>' : '';
+                    $compensado = ($rows['compensado'] == 'N')
+                        ? '<svg class="inline-block w-4 h-4 ml-1 text-rose-500 align-text-bottom" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>'
+                        : '';
 
                     echo '
-						  <input type="hidden" name="idServicoCartao[]" value="' . $rows['id'] . '" />
-						  <tr style="vertical-align: middle;">
-						  <td>'.$rows['data_servico'].'</td>
-						  <td>'.$rows['data_recebido'].'</td>
-						  <td valign="middle">' . $rows['cliente'].'</td>
-						  <td valign="middle">'.$rows['atendimento'].'</td>
-						  <td valign="middle">'.$rows['nome_paciente'].'</td>
-						 
-						  <td align="center">'.$valorFinal.'</td>
-						 
-						  <td align="center">'.$rows['tipoPagamento'].' '.$compensado.'</td>
-						  <td align="center"><input type="checkbox" id="switch-size" name="depositadoCartao[]" value="'. $rows['id'] . '" '. $depositado . ' data-size="small"></td>
-						 
-						 
-						  </tr>
-					
+						<input type="hidden" name="idServicoCartao[]" value="'.$rows['id'].'" />
+						<tr class="hover:bg-slate-50">
+							<td class="px-3 py-2.5 tabular-nums">'.$rows['data_servico'].'</td>
+							<td class="px-3 py-2.5 tabular-nums">'.$rows['data_recebido'].'</td>
+							<td class="px-3 py-2.5 font-medium">'.$rows['cliente'].'</td>
+							<td class="px-3 py-2.5 text-slate-600">'.$rows['atendimento'].'</td>
+							<td class="px-3 py-2.5">'.$rows['nome_paciente'].'</td>
+							<td class="px-3 py-2.5 text-right tabular-nums font-medium">'.$valorFinal.'</td>
+							<td class="px-3 py-2.5 text-slate-600">'.$rows['tipoPagamento'].$compensado.'</td>
+							<td class="px-3 py-2.5 text-center">
+								<input type="checkbox" name="depositadoCartao[]" value="'.$rows['id'].'" '.$depositado.' class="w-4 h-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer" />
+							</td>
+						</tr>
 					';
                 }
 
-
-
                 echo '
-						</tbody>
+							</tbody>
 						</table>
-						<button type="submit" class="btn btn-primary" name="btnSalvarCartao" style="float:right; margin-top:20px; margin-bottom:100px;"><span class="glyphicon glyphicon-floppy-saved"></span>&nbsp; Salvar</button>
-						
-						</form>
+					</div>
+					<div class="flex justify-end pt-4">
+						<button type="submit" name="btnSalvarCartao" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 rounded-lg cursor-pointer transition-colors">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75 10.5 18.75 19.5 5.25"/></svg>
+							Salvar
+						</button>
+					</div>
+					</form>
 				';
-                echo '<a name="final" />';
+                echo '<a name="final"></a>';
             }
             else
             {
-                echo '<h3 style="margin:20px;">Sem registros</h3>';
+                echo '<p class="px-4 py-6 text-sm text-slate-500">Sem registros.</p>';
             }
         }
         else
@@ -1208,68 +1198,65 @@ class cadastro
 				$this->dadosServico['compensado'] = $rows['compensado'];
 				
 				
+				// Icones SVG inline reusados nas badges/buttons (substituem glyphicon do bootstrap legado)
+				$svgCheck = '<svg class="inline-block w-4 h-4 text-emerald-600 align-text-bottom" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75 10.5 18.75 19.5 5.25"/></svg>';
+				$svgX = '<svg class="inline-block w-4 h-4 text-rose-500 align-text-bottom" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>';
+
 				if($this->dadosServico['nota'] == 'N')
 				{
-					$this->dadosServico['nota'] = '<span class="glyphicon glyphicon-ok"></span>';
+					$this->dadosServico['nota'] = $svgCheck;
 					$this->dadosServico['notaSim'] = 'checked';
 					$this->dadosServico['notaNao'] = '';
 				}
 				else
 				{
-					$this->dadosServico['nota'] = '<span class="glyphicon glyphicon-remove"></span>';$this->dadosServico['notaSim'] = '';
-					$this->dadosServico['notaNao'] = 'checked';		
+					$this->dadosServico['nota'] = $svgX;
+					$this->dadosServico['notaSim'] = '';
+					$this->dadosServico['notaNao'] = 'checked';
 				}
-				
+
 				if($this->dadosServico['recebido'] == 'S')
 				{
-					$this->dadosServico['recebidoCheck'] = '<span class="glyphicon glyphicon-ok"></span>';	
+					$this->dadosServico['recebidoCheck'] = $svgCheck;
 				}
 				else
 				{
-					$this->dadosServico['recebidoCheck'] = '<span class="glyphicon glyphicon-remove"></span>';		
+					$this->dadosServico['recebidoCheck'] = $svgX;
 				}
-				
+
 				if($this->dadosServico['depositado'] == 'S')
 				{
-					//$this->dadosServico['depositado'] = '<span class="glyphicon glyphicon-ok"></span>';
-					//$this->dadosServico['depositadoButton'] = '<button class="btn btn-success" disabled>
-					#											<span class="glyphicon glyphicon-ok"></span>
-					#											&nbsp;Depositado</button>';
 					$this->dadosServico['depositadoButton'] = '';
 				}
 				else
 				{
-					//$this->dadosServico['depositado'] = '<span class="glyphicon glyphicon-remove"></span>';	
 					$this->dadosServico['depositadoButton'] = '
-								<div class="col-sm-2 padInput" style="margin:0;">
-								<input type="'.$typeData.'" data-provide="datepicker" class="form-control" onkeyup="Formatadata(this,event)" id="txtDataDeposito" name="txtDataDeposito" placeholder="" />
-								</div>
-								<button type="submit" name="btnDepositado" class="btn btn-default ">
-									<span class="glyphicon glyphicon-envelope"></span>
-									&nbsp;Marcar como depositado
-								</button>
-																	';
+						<div class="flex items-center gap-2">
+							<input type="'.$typeData.'" data-provide="datepicker" class="block w-40 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500" onkeyup="Formatadata(this,event)" id="txtDataDeposito" name="txtDataDeposito" placeholder="dd/mm/aaaa" />
+							<button type="submit" name="btnDepositado" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 rounded-lg cursor-pointer transition-colors">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+								Marcar como depositado
+							</button>
+						</div>';
 				}
-				
-				
+
+
 				if($this->dadosServico['compensado'] == 'S')
 				{
-					//$this->dadosServico['depositado'] = '<span class="glyphicon glyphicon-ok"></span>';
-					//$this->dadosServico['compensadoButton'] = '<input type="submit" name="btnNCompensado" class="btn btn-default" value="Marcar como Não Compensado" />';
-					$this->dadosServico['compensadoButton'] = '<button type="submit" name="btnNCompensado" class="btn btn-default ">
-																	<span class="glyphicon glyphicon-remove"></span>
-																	&nbsp;Marcar como Não Compensado
-																</button>
-																	';
+					$this->dadosServico['compensadoButton'] = '
+						<button type="submit" name="btnNCompensado" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+							<svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+							Marcar como Não Compensado
+						</button>';
 				}
 				else
 				{
-					//$this->dadosServico['depositado'] = '<span class="glyphicon glyphicon-remove"></span>';
-					$this->dadosServico['compensadoButton'] = '<button class="btn btn-danger" disabled>
-																<span class="glyphicon glyphicon-remove"></span>
-																&nbsp;Não Compensado</button>';
-					//$this->dadosServico['compensadoButton'] = '';					
-				}				
+					$this->dadosServico['compensadoButton'] = '
+						<span class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-rose-700 bg-rose-50 ring-1 ring-rose-200 rounded-lg">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+							Não Compensado
+						</span>';
+				}
 			}
 		}
 	}
@@ -1416,50 +1403,52 @@ class cadastro
 			$RecordCount = $result->num_rows;
 			if($RecordCount > 0)
 			{
-				echo "
-						<div class=\"table-responsive\" style=\"margin-top:20px;\">
-            			<table class=\"table table-striped table-bordered table-hover\">
-              			<thead>
-                		<tr>
-						<th width=\"5%\" style=\"text-align:center;\">Dia de Vencimento</th>
-	              		<th>Despesa</th>
-						<th>Descrição</th>
-                  		<th>Valor</th>
-						<th width=\"5%\"></th>
-						<th width=\"5%\"></th>
-                		</tr>
-              			</thead>
-              			<tbody>				
-				";
-				
+				echo '
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-center w-24">Vencimento</th>
+									<th class="px-4 py-3 text-left">Despesa</th>
+									<th class="px-4 py-3 text-left">Descrição</th>
+									<th class="px-4 py-3 text-right">Valor</th>
+									<th class="px-4 py-3 text-right w-40">Ações</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
+				';
+
 				while($rows = $result->fetch_assoc())
 				{
-					echo '
-							<tr>
-							<td>'.$rows['dia_vencimento'].'</td>
-                  			<td>'.$rows['despesa'].'</td>
-							<td>'.$rows['descricao'].'</td>
-                 			<td>'.$rows['valor_despesa'].'</td>
-							<td><a href="?s=despesas&e=S&id='.$rows['id'].'"><button class="btn btn-success btn-xs">Editar</button></a></td>
-							<td align="center">
-						 		<form name="delServico" action="?s=despesas" method="post" onsubmit="return ConfirmaDelete();">
-						  		<input type="hidden" name="txtIdDespesaFixa" value="'.$rows['id'].'" />
-						  		<button type="submit" class="btn btn-danger btn-xs" name="btnDelDespesa"><span class="glyphicon glyphicon-trash"></span>&nbsp&nbspExcluir</button>
-						 		</form>
-						  	</td>						
-							</tr>
-					';
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5 text-center font-medium text-slate-900 tabular-nums">'.$rows['dia_vencimento'].'</td>
+								<td class="px-4 py-2.5 font-medium">'.$rows['despesa'].'</td>
+								<td class="px-4 py-2.5 text-slate-600">'.$rows['descricao'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums font-medium">R$ '.number_format((float)$rows['valor_despesa'], 2, ',', '.').'</td>
+								<td class="px-4 py-2.5">
+									<div class="flex items-center justify-end gap-2">
+										<a href="?s=despesas&e=S&id='.$rows['id'].'" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 ring-1 ring-brand-200 rounded-md cursor-pointer transition-colors">Editar</a>
+										<form action="?s=despesas" method="post" onsubmit="return ConfirmaDelete();" class="inline">
+											<input type="hidden" name="txtIdDespesaFixa" value="'.$rows['id'].'" />
+											<button type="submit" name="btnDelDespesa" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 ring-1 ring-rose-200 rounded-md cursor-pointer transition-colors">
+												<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
+												Excluir
+											</button>
+										</form>
+									</div>
+								</td>
+							</tr>';
 				}
-				
-				echo "
-						</tbody>
-            			</table>
-						</div>
-				";
+
+				echo '
+							</tbody>
+						</table>
+					</div>
+				';
 			}
 			else
 			{
-				echo "Sem despesas cadastradas";
+				echo '<p class="px-4 py-6 text-sm text-slate-500">Sem despesas cadastradas.</p>';
 			}			
 		}
 	}
@@ -1790,72 +1779,54 @@ class cadastro
 			if($RecordCount > 0)
 			{
 				echo '
-						<div class="table-responsive" style="margin-top:20px;">
-						<table class="table table-striped table-hover table-bordered" style="font-size:12px;">
-						<thead>
-						<tr>
-						<!-- <th></th> -->
-						<th>Forma de Pagamento</th>
-						<th>Descrição</th>
-						<th style="text-align:center" width="10%">(%) do Desconto</th>
-						<th style="text-align:center" width="10%">Dias para recebimento</th>
-						<th style="text-align:center" width="5%"></th>
-						<th style="text-align:center" width="5%"></th>
-						</tr>
-						</thead>
-						<tbody>				
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Forma de Pagamento</th>
+									<th class="px-4 py-3 text-left">Descrição</th>
+									<th class="px-4 py-3 text-right">% Desconto</th>
+									<th class="px-4 py-3 text-right">Dias</th>
+									<th class="px-4 py-3 text-right w-40">Ações</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				while($rows = $result->fetch_assoc())
 				{
-					echo '
-							<tr>
-							<!-- <td></td> -->
-							<td>'.$rows['tipo'].'</td>
-							<td>'.$rows['descricao'].'</td>
-							<td align="center">'.$rows['p_desconto'].'</td>
-							<td align="center">'.$rows['dias'].'</td>
-							<td style="text-align:center"><a href="?s=descontos&e=S&id='.$rows['id'].'"><button class="btn btn-success btn-xs">Editar</button></a></td>';
-
+					$excluirBtn = '';
 					if($this->verificaPagamentoUsado($rows['id']) == 0) {
-
-                        echo '
-							<td style="text-align:center">
-								<form name="frmExcluirPagamento" action="?s=descontos" method="post" onsubmit="return ConfirmaDelete();">
+						$excluirBtn = '
+							<form action="?s=descontos" method="post" onsubmit="return ConfirmaDelete();" class="inline">
 								<input type="hidden" name="txtIdPagamento" value="'.$rows['id'].'" />
-								<input type="submit" class="btn btn-danger btn-xs" name="btnExcluirFormaPagamento" value="Excluir">
-								</form>
-							</td>
-							
-							</tr>
-						';
-					}
-					else {
-
-
-                        echo '
-							<td>
-								
-							</td>
-							
-							</tr>
-						';
+								<button type="submit" name="btnExcluirFormaPagamento" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 ring-1 ring-rose-200 rounded-md cursor-pointer transition-colors">Excluir</button>
+							</form>';
 					}
 
-
-
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5 font-medium text-slate-900">'.$rows['tipo'].'</td>
+								<td class="px-4 py-2.5 text-slate-600">'.$rows['descricao'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$rows['p_desconto'].'</td>
+								<td class="px-4 py-2.5 text-right tabular-nums">'.$rows['dias'].'</td>
+								<td class="px-4 py-2.5">
+									<div class="flex items-center justify-end gap-2">
+										<a href="?s=descontos&e=S&id='.$rows['id'].'" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 ring-1 ring-brand-200 rounded-md cursor-pointer transition-colors">Editar</a>
+										'.$excluirBtn.'
+									</div>
+								</td>
+							</tr>';
 				}
-				
-				
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
-						</div>
+					</div>
 				';
 			}
 			else
 			{
-				echo 'Sem registros';
+				echo '<p class="px-4 py-6 text-sm text-slate-500">Sem registros.</p>';
 			}
 		}
 	}
@@ -2050,48 +2021,44 @@ class cadastro
 			if($RecordCount > 0)
 			{
 				echo '
-						<div class="table-responsive" style="margin-top:20px;">
-						<table class="table table-striped table-hover" style="font-size:12px;">
-						<thead>
-						<tr>
-						<!-- <th></th> -->
-						<th>Cliente</th>
-						<th>Descrição</th>
-						<th style="text-align:center" width="5%"></th>
-						<th style="text-align:center" width="5%"></th>
-						</tr>
-						</thead>
-						<tbody>				
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Cliente</th>
+									<th class="px-4 py-3 text-left">Descrição</th>
+									<th class="px-4 py-3 text-right w-40">Ações</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				while($rows = $result->fetch_assoc())
 				{
-					echo '
-							<tr>
-							<!-- <td></td> -->
-							<td>'.$rows['nome_cliente'].'</td>
-							<td>'.$rows['descricao'].'</td>
-							<td><a href="?s=clientes&e=S&id='.$rows['id'].'"><button class="btn btn-success btn-xs">Editar</button></a></td>
-							<td>
-								<form name="frmExcluirCliente" action="?s=clientes" method="post" onsubmit="return ConfirmaDelete();">
-								<input type="hidden" name="txtIdCliente" value="'.$rows['id'].'" />
-								<input type="submit" class="btn btn-danger btn-xs" name="btnExcluirCliente" value="Excluir">
-								</form>
-							</td>
-							</tr>
-					';
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5 font-medium text-slate-900">'.$rows['nome_cliente'].'</td>
+								<td class="px-4 py-2.5 text-slate-600">'.$rows['descricao'].'</td>
+								<td class="px-4 py-2.5">
+									<div class="flex items-center justify-end gap-2">
+										<a href="?s=clientes&e=S&id='.$rows['id'].'" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 ring-1 ring-brand-200 rounded-md cursor-pointer transition-colors">Editar</a>
+										<form action="?s=clientes" method="post" onsubmit="return ConfirmaDelete();" class="inline">
+											<input type="hidden" name="txtIdCliente" value="'.$rows['id'].'" />
+											<button type="submit" name="btnExcluirCliente" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 ring-1 ring-rose-200 rounded-md cursor-pointer transition-colors">Excluir</button>
+										</form>
+									</div>
+								</td>
+							</tr>';
 				}
-				
-				
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
-						</div>
+					</div>
 				';
 			}
 			else
 			{
-				echo 'Sem registros';
+				echo '<p class="px-4 py-6 text-sm text-slate-500">Sem registros.</p>';
 			}
 		}
 	}
@@ -2353,48 +2320,44 @@ class cadastro
 			if($RecordCount > 0)
 			{
 				echo '
-						<div class="table-responsive" style="margin-top:20px;">
-						<table class="table table-striped table-hover table-bordered" style="font-size:12px;">
-						<thead>
-						<tr>
-						<!-- <th></th> -->
-						<th>Nome</th>
-						<th style="text-align:center" width="10%">Login</th>
-						<th style="text-align:center" width="5%"></th>
-						<th style="text-align:center" width="5%"></th>
-						</tr>
-						</thead>
-						<tbody>				
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+								<tr>
+									<th class="px-4 py-3 text-left">Nome</th>
+									<th class="px-4 py-3 text-left">Login</th>
+									<th class="px-4 py-3 text-right w-40">Ações</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-slate-100 text-slate-700">
 				';
-				
+
 				while($rows = $result->fetch_assoc())
 				{
-					echo '
-							<tr>
-							<!-- <td></td> -->
-							<td>'.$rows['nome'].'</td>
-							<td align="center">'.$rows['login_usuario'].'</td>
-							<td><a href="?s=usuarios&e=S&id='.$rows['id'].'"><button class="btn btn-success btn-xs">Editar</button></a></td>
-							<td>
-								<form name="frmExcluirUsuario" action="?s=usuarios" method="post" onsubmit="return ConfirmaDelete();">
-								<input type="hidden" name="txtidUsuario" value="'.$rows['id'].'" />
-								<input type="submit" class="btn btn-danger btn-xs" name="btnExcluirUsuario" value="Excluir">
-								</form>
-							</td>
-							</tr>
-					';
+					echo '<tr class="hover:bg-slate-50">
+								<td class="px-4 py-2.5 font-medium text-slate-900">'.$rows['nome'].'</td>
+								<td class="px-4 py-2.5 text-slate-600 tabular-nums">'.$rows['login_usuario'].'</td>
+								<td class="px-4 py-2.5">
+									<div class="flex items-center justify-end gap-2">
+										<a href="?s=usuarios&e=S&id='.$rows['id'].'" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 ring-1 ring-brand-200 rounded-md cursor-pointer transition-colors">Editar</a>
+										<form action="?s=usuarios" method="post" onsubmit="return ConfirmaDelete();" class="inline">
+											<input type="hidden" name="txtidUsuario" value="'.$rows['id'].'" />
+											<button type="submit" name="btnExcluirUsuario" class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 ring-1 ring-rose-200 rounded-md cursor-pointer transition-colors">Excluir</button>
+										</form>
+									</div>
+								</td>
+							</tr>';
 				}
-				
-				
+
 				echo '
-						</tbody>
+							</tbody>
 						</table>
-						</div>
+					</div>
 				';
 			}
 			else
 			{
-				echo 'Sem Usuários Cadastrados';
+				echo '<p class="px-4 py-6 text-sm text-slate-500">Sem usuários cadastrados.</p>';
 			}
 		}
 		
